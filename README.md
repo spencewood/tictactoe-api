@@ -1,3 +1,3 @@
-# Gnot.es server
+# Tic Tac Toe worker role
 
-Persists gnot.es data
+Provides the interactive Tic Tac Toe experience.
