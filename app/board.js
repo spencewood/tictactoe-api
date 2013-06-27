@@ -69,8 +69,14 @@ Board.prototype.getPlayerValue = function (player) {
     return player === 0 ? 3 : 5;
 };
 
+/**
+ * incrementTurn
+ * Increments the turn
+ * @return {Object} this
+ */
 Board.prototype.incrementTurn = function () {
     this._turn++;
+    return this;
 };
 
 /**

@@ -80,6 +80,19 @@ describe('Board', function () {
         });
     });
 
+    describe('incrementTurn', function () {
+        it('should increment the turn value by 1', function () {
+            var board = new Board(1);
+            board.incrementTurn();
+            board._turn.should.equal(1);
+        });
+
+        it('should return the board instance', function () {
+            var board = new Board(1);
+            board.incrementTurn().should.equal(board);
+        });
+    });
+
     describe('place', function () {
         it('should return the board instance', function () {
             var board = new Board(1);
