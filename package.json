@@ -2,6 +2,7 @@
     "name": "tictactoe-worker",
     "version": "0.0.1",
     "dependencies": {
+        "underscore": "1.4.x",
         "pubnub": "3.4.x"
     },
     "devDependencies": {
