@@ -1,7 +1,7 @@
 var _ = require('underscore');
 
 /**
- * Tic Tac Toe Board Instance
+ * Tic Tac Toe Board Constructor
  */
 var Board = function (id) {
     if (typeof id === 'undefined') {
@@ -14,6 +14,17 @@ var Board = function (id) {
     });
     this._turn = 0;
 };
+
+// Static spot identifiers
+Board.topLeft = 0;
+Board.topMiddle = 1;
+Board.topRight = 2;
+Board.middleLeft = 3;
+Board.middle = 4;
+Board.middleRight = 5;
+Board.bottomLeft = 6;
+Board.bottomMiddle = 7;
+Board.bottomRight = 8;
 
 /**
  * getSpots
@@ -64,7 +75,7 @@ Board.prototype.getTurn = function () {
  */
 Board.prototype.getPlayerValue = function (player) {
     if (player < 0 || player > 1) {
-        throw RangeError('Must specify player 0 or 1');
+        throw new RangeError('Must specify player 0 or 1');
     }
     return player === 0 ? 3 : 5;
 };

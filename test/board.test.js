@@ -16,8 +16,8 @@ describe('Board', function () {
     it('should create a board of 9 spots of 2 on setup', function () {
         var spots = new Board(1)._spots;
         spots.length.should.equal(9);
-        spots.every( function (value) {
-            return value === 2;
+        spots.every( function (spot) {
+            return spot === 2;
         });
     });
 
@@ -25,13 +25,13 @@ describe('Board', function () {
         new Board(1)._turn.should.equal(0);
     });
 
-    describe('getSpots', function () {
+    describe('#getSpots', function () {
         it('should return the array of spots for the board', function () {
             new Board(1).getSpots().should.be.instanceOf(Array);
         });
     });
 
-    describe('setSpot', function () {
+    describe('#setSpot', function () {
         it('should return the board instance', function () {
             var board = new Board(1);
             board.setSpot(0, 0).should.equal(board);
@@ -51,7 +51,7 @@ describe('Board', function () {
         });
     });
 
-    describe('isSpotEmpty', function () {
+    describe('#isSpotEmpty', function () {
         it('should return whether or not the spot is empty', function () {
             var board = new Board(1);
             board.isSpotEmpty(0).should.be.true;
@@ -59,13 +59,13 @@ describe('Board', function () {
         });
     });
 
-    describe('getTurn', function () {
+    describe('#getTurn', function () {
         it('should return the turn number', function () {
             new Board(1).getTurn().should.equal(0);
         });
     });
 
-    describe('getPlayerValue', function () {
+    describe('#getPlayerValue', function () {
         it('should throw an error if the player is not 0 or 1', function () {
             var board = new Board(1);
             (function () {
@@ -80,7 +80,7 @@ describe('Board', function () {
         });
     });
 
-    describe('incrementTurn', function () {
+    describe('#incrementTurn', function () {
         it('should increment the turn value by 1', function () {
             var board = new Board(1);
             board.incrementTurn();
@@ -93,7 +93,7 @@ describe('Board', function () {
         });
     });
 
-    describe('place', function () {
+    describe('#place', function () {
         it('should return the board instance', function () {
             var board = new Board(1);
             board.place('x', 0).should.equal(board);
