@@ -21,9 +21,12 @@ app.use(express.methodOverride());
 app.use(app.router);
 
 // development only
-if ('development' == app.get('env')) {
+app.configure('development', function(){
     app.use(express.errorHandler());
-}
+});
+
+// broadcast events
+require('./app/broadcast');
 
 // routes
 app.post('/board', board.create);
