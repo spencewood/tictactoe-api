@@ -1,14 +1,15 @@
 var Board = require('./board');
+var _ = require('underscore');
 
 /**
  * Tic Tac Toe Master Constructor
  */
-var AI = function (board, player) {
-    if(!board instanceof Board) {
+var AI = function(board, player){
+    if(!board instanceof Board){
         throw new TypeError('Must pass along a board to play on');
     }
 
-    if(isNaN(player)) {
+    if(isNaN(player)){
         throw new Error('Must pass a player');
     }
 
@@ -21,8 +22,8 @@ var AI = function (board, player) {
  * Finds the next move
  * @return {Object} this
  */
-AI.prototype.go = function () {
-    switch(this.board.getTurn()){
+AI.prototype.go = function(turn){
+    switch(turn){
         case 8:
         case 6:
         case 7:
@@ -39,5 +40,14 @@ AI.prototype.go = function () {
     }
     return this;
 };
+
+/**
+ * findSpot
+ * @return {Number} Chosen spot
+ */
+AI.prototype.findSpot = function(){
+    var spots = this.board.getOpenSpotIndexes();
+};
+
 
 module.exports = AI;
