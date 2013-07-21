@@ -1,6 +1,10 @@
 {
     "name": "tictactoe-worker",
     "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node app.js"
+    },
     "dependencies": {
         "underscore": "1.4.x",
         "pubnub": "3.4.x",

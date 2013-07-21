@@ -15,6 +15,7 @@ var Board = function(){
 
     BoardModel.create({}, function(err, model){
         this.model = model;
+        this.id = model.id;
         this.emit('created', this);
         Events.emit('board:created', this);
     }.bind(this));
