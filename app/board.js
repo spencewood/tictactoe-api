@@ -1,20 +1,23 @@
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var _ = require('underscore');
+var BoardModel = require('../models/board-model');
+var Events = require('../events');
 
 /**
  * Tic Tac Toe Board Constructor
  */
-var Board = function(id){
-    if (typeof id === 'undefined'){
-        throw new Error('Must sprecify a game id');
-    }
-
-    this._id = id;
+var Board = function(){
     this._spots = _.map(_.range(9), function(){
         return 2;
     });
     this._turn = 0;
+
+    BoardModel.create({}, function(err, model){
+        this.model = model;
+        this.emit('created', this);
+        Events.emit('board:created', this);
+    }.bind(this));
 };
 
 /**
@@ -128,5 +131,8 @@ Board.prototype.place = function(player, index){
  * registerPlayer
  * Registers a player
  */
+Board.prototype.register = function(){
+
+};
 
 module.exports = Board;
