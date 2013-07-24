@@ -4,7 +4,7 @@ var _ = require('underscore');
 var Events = require('../events');
 var Board = require('../app/board');
 
-describe('Board', function(){
+describe.skip('Board', function(){
     it('should be able to be instantiated', function(){
         new Board().should.be.instanceOf(Object);
     });
@@ -30,7 +30,7 @@ describe('Board', function(){
     });
 
     it('should create a board of 9 spots of 2 on setup', function(){
-        var spots = new Board()._spots;
+        var spots = new Board().getSpots();
         spots.length.should.equal(9);
         spots.every(function(spot){
             return spot === 2;
@@ -38,7 +38,7 @@ describe('Board', function(){
     });
 
     it('should start with turn number 0 on board creation', function(){
-        new Board()._turn.should.equal(0);
+        new Board().getTurn().should.equal(0);
     });
 
     describe('#getSpots', function(){

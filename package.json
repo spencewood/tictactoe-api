@@ -8,7 +8,9 @@
     "dependencies": {
         "underscore": "1.4.x",
         "pubnub": "3.4.x",
-        "mongoose": "*"
+        "express": "*",
+        "mongoose": "*",
+        "express-mongoose": "*"
     },
     "devDependencies": {
         "mocha": "*",

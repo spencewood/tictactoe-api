@@ -6,7 +6,7 @@ var pubnub = require('pubnub').init({
 var Events = require('../events');
 
 var channel = function(name){
-    return name + (config.isDevelopment() ? '-dev' : '');
+    return name + (config.isDevelopment ? '-dev' : '');
 };
 
 Events.on('board:created', function(board){

@@ -7,18 +7,15 @@ var Events = require('../events');
 /**
  * Tic Tac Toe Board Constructor
  */
-var Board = function(){
-    this._spots = _.map(_.range(9), function(){
-        return 2;
-    });
-    this._turn = 0;
-
-    BoardModel.create({}, function(err, model){
-        this.model = model;
-        this.id = model.id;
-        this.emit('created', this);
-        Events.emit('board:created', this);
-    }.bind(this));
+var Board = function(model){
+    if(model === null){
+        BoardModel.create({}, function(err, model){
+            this.model = model;
+            this.id = model.id;
+            this.emit('created', this);
+            Events.emit('board:created', this);
+        }.bind(this));
+    }
 };
 
 /**
@@ -42,7 +39,7 @@ Board.bottomRight = 8;
  * @returns {Array} The array of game spots
  */
 Board.prototype.getSpots = function(){
-    return this._spots;
+    return this.model.spots;
 };
 
 /**
@@ -71,7 +68,7 @@ Board.prototype.setSpot = function(index, num){
         throw new RangeError('Must set index between 0 and 8');
     }
     if (this.isSpotEmpty(index)){
-        this._spots[index] = num;
+        this.getSpots()[index] = num;
     }
     return this;
 };
@@ -82,7 +79,7 @@ Board.prototype.setSpot = function(index, num){
  * @returns {Bool} returns if index is empty
  */
 Board.prototype.isSpotEmpty = function(index){
-    return this._spots[index] === 2;
+    return this.getSpots()[index] === 2;
 };
 
 /**
@@ -90,7 +87,7 @@ Board.prototype.isSpotEmpty = function(index){
  * @returns {Number} Turn number
  */
 Board.prototype.getTurn = function(){
-    return this._turn;
+    return this.model.turn;
 };
 
 /**

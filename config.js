@@ -4,7 +4,7 @@ module.exports = {
     database: {
         url: process.env.MONGOLAB_URI ||
             process.env.MONGOHQ_URL ||
-            'mongodb://localhost/Nouns'
+            'mongodb://localhost/TicTacToe'
     },
     pubnub: {
         subscribe_key: process.env.PUBNUB_SUBSCRIBE_KEY || 'demo',
