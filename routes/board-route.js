@@ -1,4 +1,5 @@
 var Board = require('../controllers/board-controller');
+var Events = require('../events');
 
 exports.create = function(req, res){
     Board.create().then(function(b){

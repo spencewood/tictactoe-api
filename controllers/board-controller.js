@@ -8,21 +8,33 @@ var Promise = require('mongoose').Promise;
 var BoardController = {
     create: function(){
         var promise = new Promise();
+
         BoardModel.create({}, promise.resolve.bind(promise));
+        promise.then(function(model){
+            Events.emit('board:created', model);
+        });
+
         return promise;
     },
 
-    find: function(query){
+    findOne: function(query, callback){
         var promise = new Promise();
-        BoardModel.find(query, promise.resolve.bind(promise));
+
+        BoardModel.findOne(query, promise.resolve.bind(promise));
+
         return promise;
     },
 
     addPlayer: function(boardId, playerId){
         var promise = new Promise();
-        this.find({ _id: boardId }).then(function(b){
-            b[0].addPlayer(playerId).save(promise.resolve.bind(promise));
+
+        this.findOne({ _id: boardId }).then(function(b){
+            b.addPlayer(playerId).save(promise.resolve.bind(promise));
+        }, promise.reject.bind(promise));
+        promise.then(function(model){
+            Events.emit('board:join', boardId, playerId);
         });
+
         return promise;
     }
 };
