@@ -18,5 +18,25 @@ exports.addPlayer = function(req, res){
         res.send({
             success: true
         });
+    }, function(err){
+        res.send(500);
     });
+};
+
+exports.removePlayer = function(req, res){
+    if(req.body.boardid === null || req.body.playerid === null){
+        res.send(500, 'Invalid parameters');
+    }
+
+    Board.removePlayer(req.body.boardid, req.body.playerid).then(function(b){
+        res.send({
+            success: true
+        });
+    }, function(err){
+        res.send(500);
+    });
+};
+
+exports.play = function(req, res){
+    
 };

@@ -69,8 +69,56 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should fail when adding too many players to a board', function(done){
+        it('should fail when adding too many players to a board', function(done){
+            BoardModel.create({ players: [1, 2] }, function(err, model){
+                BoardController.addPlayer(model._id, 3).then(null, function(err){
+                    err.should.not.be.null;
+                    done();
+                }).end();
+            });
+        });
 
+        it('should raise a "board:ready" event with boardid when two players have joined a board', function(done){
+            Events.once('board:ready', function(boardId){
+                boardId.should.not.be.null;
+                done();
+            });
+
+            BoardModel.create({ players: [1] }, function(err, model){
+                BoardController.addPlayer(model._id, 2);
+            });
+        });
+    });
+
+    describe('#removePlayer', function(){
+        it('should return a promise', function(){
+            BoardController.removePlayer(123, 1).should.be.instanceOf(Promise);
+        });
+
+        it('should fail when removing an invalid user from an existing board', function(done){
+            BoardModel.create({}, function(err, model){
+                BoardController.removePlayer(model._id, 1).then(null, function(err){
+                    err.should.not.be.null;
+                    done();
+                });
+            });
+        });
+
+        it('should fail when removing a user from an invalid board', function(done){
+            BoardController.removePlayer(1, 1).then(null, function(err){
+                err.should.not.be.null;
+                done();
+            });
+        });
+
+        it('should make the board not ready when there are not enough players', function(done){
+            BoardModel.create({ players: [1, 2] }, function(err, model){
+                model.isReady().should.be.true;
+                BoardController.removePlayer(model._id, 1).then(function(b){
+                    b.isReady().should.be.false;
+                    done();
+                });
+            });
         });
     });
 });

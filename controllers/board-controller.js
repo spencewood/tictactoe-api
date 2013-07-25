@@ -1,6 +1,5 @@
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
-var _ = require('underscore');
 var BoardModel = require('../models/board-model');
 var Events = require('../events');
 var Promise = require('mongoose').Promise;
@@ -29,11 +28,37 @@ var BoardController = {
         var promise = new Promise();
 
         this.findOne({ _id: boardId }).then(function(b){
-            b.addPlayer(playerId).save(promise.resolve.bind(promise));
+            try{
+                b.addPlayer(playerId);
+            } catch(e){
+                promise.reject(e);
+            }
+
+            b.save(promise.resolve.bind(promise));
         }, promise.reject.bind(promise));
-        promise.then(function(model){
+
+        promise.then(function(b){
             Events.emit('board:join', boardId, playerId);
+            if(b.players.length === 2){
+                Events.emit('board:ready', boardId);
+            }
         });
+
+        return promise;
+    },
+
+    removePlayer: function(boardId, playerId){
+        var promise = new Promise();
+
+        this.findOne({ _id: boardId }).then(function(b){
+            try{
+                b.removePlayer(playerId);
+            } catch(e){
+                promise.reject(e);
+            }
+
+            b.save(promise.resolve.bind(promise));
+        }, promise.reject.bind(promise));
 
         return promise;
     }
