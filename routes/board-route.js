@@ -18,9 +18,7 @@ exports.addPlayer = function(req, res){
         res.send({
             success: true
         });
-    }, function(err){
-        res.send(500);
-    });
+    }, next);
 };
 
 exports.removePlayer = function(req, res){
@@ -32,11 +30,17 @@ exports.removePlayer = function(req, res){
         res.send({
             success: true
         });
-    }, function(err){
-        res.send(500);
-    });
+    }, next);
 };
 
 exports.play = function(req, res){
-    
+    if(req.body.boardid === null || req.body.spot === null){
+        res.send(500, 'Invalid parameters');
+    }
+
+    Board.play(req.body.boardid, req.body.spot).then(function(b){
+        res.send({
+            success: true
+        });
+    }, next);
 };

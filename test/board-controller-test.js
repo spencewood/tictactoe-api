@@ -120,5 +120,61 @@ describe('Board Controller', function(){
                 });
             });
         });
+
+        it('should emit a "board:leave" event with the boardid and playerid', function(done){
+            Events.once('board:leave', function(boardId, playerId){
+                boardId.should.not.be.null;
+                playerId.should.not.be.null;
+                done();
+            });
+            BoardModel.create({ players: [1] }, function(err, model){
+                BoardController.removePlayer(model._id, 1);
+            });
+        });
+    });
+
+    describe('#play', function(){
+        it('should return a promise', function(){
+            BoardController.play(123, 1, 1).should.be.instanceOf(Promise);
+        });
+
+        it('should not be able to play when board is not ready', function(done){
+            BoardModel.create({}, function(err, model){
+                BoardController.play(model._id, 1, 1).then(null, function(err){
+                    err.should.not.be.null;
+                    done();
+                });
+            });
+        });
+
+        it('should add a 3 for player 1 in the chosen spot', function(done){
+            BoardModel.create({ players: [1, 2] }, function(err, model){
+                BoardController.play(model._id, 1, 1).then(function(b){
+                    b.getSpots()[1].should.equal(3);
+                    done();
+                });
+            });
+        });
+
+        it('should add a 5 for player 2 in the chosen spot', function(done){
+            BoardModel.create({ players: [1, 2] }, function(err, model){
+                BoardController.play(model._id, 2, 1).then(function(b){
+                    b.getSpots()[1].should.equal(5);
+                    done();
+                });
+            });
+        });
+
+        it('should emit a "board:move" event with board, player and spot', function(done){
+            Events.once('board:move', function(boardId, playerId, spot){
+                boardId.should.not.be.null;
+                playerId.should.not.be.null;
+                spot.should.not.be.null;
+                done();
+            });
+            BoardModel.create({ players: [1, 2] }, function(err, model){
+                BoardController.play(model._id, 1, 1);
+            });
+        });
     });
 });

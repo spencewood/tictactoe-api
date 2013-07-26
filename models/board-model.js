@@ -24,6 +24,20 @@ schema.methods.removePlayer = function(playerId){
     return this;
 };
 
+schema.methods.play = function(spot, num){
+    if(!this.isReady()){
+        throw 'Board not ready';
+    }
+    else{
+        this.spots[spot] = num;
+    }
+    return this;
+};
+
+schema.methods.getSpots = function(){
+    return this.spots;
+};
+
 schema.methods.isReady = function(){
     return this.players.length === 2;
 };
