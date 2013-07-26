@@ -12,7 +12,11 @@ var BoardSchema = new Schema({
         type: [Number],
         default: [2, 2, 2, 2, 2, 2, 2, 2, 2]
     },
-    players: [Number]
+    players: [Number],
+    isComplete: {
+        type: Boolean,
+        default: false
+    }
 });
 
 module.exports = BoardSchema;

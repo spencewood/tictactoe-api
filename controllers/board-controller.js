@@ -93,6 +93,9 @@ var BoardController = {
 
         promise.then(function(model){
             Events.emit('board:move', boardId, playerId, spot);
+            if(model.isComplete){
+                Events.emit('board:complete', boardId);
+            }
         });
 
         return promise;

@@ -69,10 +69,6 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should not raise an event if the player was not added to the board', function(done){
-
-        });
-
         it('should fail when adding too many players to a board', function(done){
             BoardModel.create({ players: [1, 2] }, function(err, model){
                 BoardController.addPlayer(model._id, 3).then(null, function(err){
@@ -137,12 +133,12 @@ describe('Board Controller', function(){
         });
     });
 
-    describe(', spots#play', function(){
+    describe('#play', function(){
         it('should return a promise', function(){
             BoardController.play(123, 1, 1).should.be.instanceOf(Promise);
         });
 
-        it.skip('should not be able to play when board is not ready', function(done){
+        it('should not be able to play when board is not ready', function(done){
             BoardModel.create({}, function(err, model){
                 BoardController.play(model._id, 1, 1).then(null, function(err){
                     err.should.not.be.null;
@@ -151,7 +147,7 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should add a 3 for player 1 in the chosen spot', function(done){
+        it('should add a 3 for player 1 in the chosen spot', function(done){
             BoardModel.create({ players: [1, 2] }, function(err, model){
                 BoardController.play(model._id, 1, 1).then(function(b){
                     b.getSpots()[1].should.equal(3);
@@ -160,7 +156,7 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should add a 5 for player 2 in the chosen spot', function(done){
+        it('should add a 5 for player 2 in the chosen spot', function(done){
             BoardModel.create({ players: [1, 2] }, function(err, model){
                 BoardController.play(model._id, 2, 1).then(function(b){
                     b.getSpots()[1].should.equal(5);
@@ -169,7 +165,7 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should emit a "board:move" event with board, player and spot', function(done){
+        it('should emit a "board:move" event with board, player and spot', function(done){
             Events.once('board:move', function(boardId, playerId, spot){
                 boardId.should.not.be.null;
                 playerId.should.not.be.null;
@@ -184,7 +180,7 @@ describe('Board Controller', function(){
         it('should return an error when trying to move to a taken spot', function(done){
             BoardModel.create({
                 players: [1, 2],
-                spots: [2, 3, 2, 2, 2, 2, 2, 2, 2] 
+                spots: [2, 3, 2, 2, 2, 2, 2, 2, 2]
             }, function(err, model){
                 BoardController.play(model._id, 2, 1).then(null, function(err){
                     err.should.not.be.null;
@@ -193,8 +189,38 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should increment the turn', function(done){
+        it('should increment the turn', function(done){
+            BoardModel.create({ players: [1, 2] }, function(err, model){
+                BoardController.play(model._id, 2, 1).then(function(b){
+                    b.getTurn().should.equal(1);
+                    done();
+                });
+            });
+        });
 
+        it('should set isComplete to true when all spots are taken', function(done){
+            BoardModel.create({
+                players: [1, 2],
+                spots: [2, 3, 5, 3, 5, 3, 5, 3, 5]
+            }, function(err, model){
+                BoardController.play(model._id, 2, 0).then(function(b){
+                    b.isComplete.should.be.true;
+                    done();
+                });
+            });
+        });
+
+        it('should raise global event with boardid when board is complete', function(done){
+            Events.once('board:complete', function(boardId){
+                boardId.should.not.be.null;
+                done();
+            });
+            BoardModel.create({
+                players: [1, 2],
+                spots: [2, 3, 5, 3, 5, 3, 5, 3, 5]
+            }, function(err, model){
+                BoardController.play(model._id, 2, 0);
+            });
         });
     });
 });

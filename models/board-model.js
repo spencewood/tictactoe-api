@@ -28,18 +28,24 @@ schema.methods.play = function(spot, num){
     if(!this.isReady()){
         throw 'Board not ready';
     }
-    else if(this.getSpots()[spot] !== 2){
+    else if(this.spots[spot] !== 2){
         throw 'Spot taken';
     }
     else{
-        this.getSpots()[spot] = num;
+        this.spots[spot] = num;
         this.markModified('spots');
+        this.turn++;
+        this.isComplete = this.spots.indexOf(2) === -1;
     }
     return this;
 };
 
 schema.methods.getSpots = function(){
     return this.spots;
+};
+
+schema.methods.getTurn = function(){
+    return this.turn;
 };
 
 schema.methods.isReady = function(){
