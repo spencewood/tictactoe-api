@@ -25,8 +25,13 @@ schema.methods.removePlayer = function(playerId){
 };
 
 schema.methods.play = function(spot, num){
+    console.log(spot, this.spots[spot]);
     if(!this.isReady()){
         throw 'Board not ready';
+    }
+    else if(this.spots[spot] !== 2){
+        console.log('spot taken!');
+        throw 'Spot taken';
     }
     else{
         this.spots[spot] = num;
