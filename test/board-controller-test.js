@@ -176,5 +176,20 @@ describe('Board Controller', function(){
                 BoardController.play(model._id, 1, 1);
             });
         });
+
+        it('should return an error when trying to move to a taken spot', function(done){
+            BoardModel.create({ players: [1, 2] }, function(err, model){
+                var play = BoardController.play(model._id, 1, 1);
+                
+                play.then(function(b){
+                    BoardController.play(model._id, 2, 1);
+                });
+
+                play.then(null, function(err){
+                    err.should.not.be.null;
+                    done();
+                });
+            });
+        });
     });
 });
