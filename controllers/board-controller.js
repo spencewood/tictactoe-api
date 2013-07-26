@@ -81,7 +81,6 @@ var BoardController = {
 
     play: function(boardId, playerId, spot){
         var promise = new Promise();
-
         this.findById(boardId).then(function(b){
             try{
                 b.play(spot, getPlayerNum(b.players, playerId));

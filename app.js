@@ -38,7 +38,7 @@ require('./app/broadcast');
 app.post('/board', board.create);
 app.post('/board/addplayer', board.addPlayer);
 app.post('/board/removePlayer', board.removePlayer);
-app.play('/board/play', board.play);
+app.post('/board/play', board.play);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));

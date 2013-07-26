@@ -137,12 +137,12 @@ describe('Board Controller', function(){
         });
     });
 
-    describe('#play', function(){
+    describe(', spots#play', function(){
         it('should return a promise', function(){
             BoardController.play(123, 1, 1).should.be.instanceOf(Promise);
         });
 
-        it('should not be able to play when board is not ready', function(done){
+        it.skip('should not be able to play when board is not ready', function(done){
             BoardModel.create({}, function(err, model){
                 BoardController.play(model._id, 1, 1).then(null, function(err){
                     err.should.not.be.null;
@@ -182,18 +182,19 @@ describe('Board Controller', function(){
         });
 
         it('should return an error when trying to move to a taken spot', function(done){
-            BoardModel.create({ players: [1, 2] }, function(err, model){
-                var play = BoardController.play(model._id, 1, 1);
-                play.then(function(b){
-                    console.log(b.getSpots());
-                    BoardController.play(b._id, 2, 1).then(function(m){
-                        console.log('er');
-                    }, function(err){
-                        err.should.not.be.null;
-                        done();
-                    });
+            BoardModel.create({
+                players: [1, 2],
+                spots: [2, 3, 2, 2, 2, 2, 2, 2, 2] 
+            }, function(err, model){
+                BoardController.play(model._id, 2, 1).then(null, function(err){
+                    err.should.not.be.null;
+                    done();
                 });
             });
+        });
+
+        it.skip('should increment the turn', function(done){
+
         });
     });
 });

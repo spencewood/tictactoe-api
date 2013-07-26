@@ -9,7 +9,7 @@ exports.create = function(req, res){
     });
 };
 
-exports.addPlayer = function(req, res){
+exports.addPlayer = function(req, res, next){
     if(req.body.boardid === null || req.body.playerid === null){
         res.send(500, 'Invalid parameters');
     }
@@ -21,7 +21,7 @@ exports.addPlayer = function(req, res){
     }, next);
 };
 
-exports.removePlayer = function(req, res){
+exports.removePlayer = function(req, res, next){
     if(req.body.boardid === null || req.body.playerid === null){
         res.send(500, 'Invalid parameters');
     }
@@ -33,12 +33,14 @@ exports.removePlayer = function(req, res){
     }, next);
 };
 
-exports.play = function(req, res){
-    if(req.body.boardid === null || req.body.spot === null){
+exports.play = function(req, res, next){
+    if(req.body.boardid === null ||
+        req.body.playerid === null ||
+        req.body.spot === null){
         res.send(500, 'Invalid parameters');
     }
 
-    Board.play(req.body.boardid, req.body.spot).then(function(b){
+    Board.play(req.body.boardid, req.body.playerid, req.body.spot).then(function(b){
         res.send({
             success: true
         });
