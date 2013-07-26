@@ -12,9 +12,9 @@ describe('Board Controller', function(){
             BoardController.create().should.be.instanceOf(Promise);
         });
 
-        it('should resolve with the new model', function(done){
+        it('should resolve with the new model id', function(done){
             BoardController.create().then(function(b){
-                b.should.be.instanceOf(BoardModel);
+                b.should.not.be.null;
                 done();
             });
         });
