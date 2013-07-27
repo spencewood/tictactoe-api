@@ -13,17 +13,6 @@ var getPlayerNum = function(players, playerId){
 };
 
 var BoardController = {
-    create: function(){
-        var promise = new Promise();
-
-        BoardModel.create({}, promise.resolve.bind(promise));
-        promise.then(function(model){
-            Events.emit('board:created', model);
-        });
-
-        return promise;
-    },
-
     findOne: function(query){
         var promise = new Promise();
 
@@ -34,6 +23,24 @@ var BoardController = {
 
     findById: function(id){
         return this.findOne({ _id: id });
+    },
+
+    all: function(fields){
+        fields = fields || [];
+        var promise = new Promise();
+        BoardModel.find({}, fields.join(' '), promise.resolve.bind(promise));
+        return promise;
+    },
+
+    create: function(){
+        var promise = new Promise();
+
+        BoardModel.create({}, promise.resolve.bind(promise));
+        promise.then(function(model){
+            Events.emit('board:created', model);
+        });
+
+        return promise;
     },
 
     addPlayer: function(boardId, playerId){

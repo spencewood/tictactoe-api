@@ -7,6 +7,24 @@ var BoardController = require('../controllers/board-controller');
 var BoardModel = require('../models/board-model');
 
 describe('Board Controller', function(){
+    describe('#findOne', function(){
+        it('should return a promise', function(){
+            BoardController.findOne({ _id: 0 }).should.be.instanceOf(Promise);
+        });
+
+        it('should fail when passing and invalid board id', function(done){
+            BoardController.findOne({ _id: 0 }).then(null, function(err){
+                done();
+            });
+        });
+    });
+
+    describe('#all', function(){
+        it('should return a promise', function(){
+            BoardController.all().should.be.instanceOf(Promise);
+        });
+    });
+
     describe('#create', function(){
         it('should return a promise', function(){
             BoardController.create().should.be.instanceOf(Promise);
@@ -25,14 +43,6 @@ describe('Board Controller', function(){
                 done();
             });
             BoardController.create();
-        });
-    });
-
-    describe('#findOne', function(){
-        it('should fail when passing and invalid board id', function(done){
-            BoardController.findOne({ _id: 0 }).then(null, function(err){
-                done();
-            });
         });
     });
 
