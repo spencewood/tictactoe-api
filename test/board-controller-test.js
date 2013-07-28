@@ -7,6 +7,12 @@ var BoardController = require('../controllers/board-controller');
 var BoardModel = require('../models/board-model');
 
 describe('Board Controller', function(){
+    after(function(){
+        BoardModel.remove({}, function(err){
+            console.log('cleaned up');
+        });
+    });
+
     describe('#findOne', function(){
         it('should return a promise', function(){
             BoardController.findOne({ _id: 0 }).should.be.instanceOf(Promise);

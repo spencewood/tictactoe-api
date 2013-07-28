@@ -2,7 +2,7 @@ var Board = require('../controllers/board-controller');
 var Events = require('../events');
 
 exports.fetch = function(req, res){
-    Board.all(['_id', 'isComplete', 'turn']).then(function(b){
+    Board.all(['_id', 'isComplete', 'turn', 'players']).then(function(b){
         res.send(b);
     });
 };

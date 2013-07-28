@@ -7,7 +7,7 @@ if(process.env.NODETIME_ACCOUNT_KEY) {
 
 var express = require('express');
 var boards = require('./routes/board-route');
-var crossDomain = require('./routes/cross-domain-route');
+var cors = require('./routes/cors');
 var http = require('http');
 var path = require('path');
 var config = require('./config');
@@ -24,8 +24,10 @@ app.set('port', config.port);
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(cors);
 app.use(app.router);
 app.use(errorHandler);
+
 
 // development only
 app.configure('development', function(){
@@ -36,7 +38,6 @@ app.configure('development', function(){
 require('./app/broadcast');
 
 // routes
-app.all('/*', crossDomain);
 app.get('/boards', boards.fetch);
 app.post('/boards', boards.create);
 app.post('/boards/addplayer', boards.addPlayer);
