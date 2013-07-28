@@ -7,6 +7,7 @@ if(process.env.NODETIME_ACCOUNT_KEY) {
 
 var express = require('express');
 var boards = require('./routes/board-route');
+var crossDomain = require('./routes/cross-domain-route');
 var http = require('http');
 var path = require('path');
 var config = require('./config');
@@ -35,6 +36,7 @@ app.configure('development', function(){
 require('./app/broadcast');
 
 // routes
+app.all('/*', crossDomain);
 app.get('/boards', boards.fetch);
 app.post('/boards', boards.create);
 app.post('/boards/addplayer', boards.addPlayer);

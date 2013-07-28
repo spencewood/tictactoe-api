@@ -9,5 +9,12 @@ module.exports = {
     pubnub: {
         subscribe_key: process.env.PUBNUB_SUBSCRIBE_KEY || 'demo',
         publish_key: process.env.PUBNUB_PUBLISH_KEY || 'demo'
-    }
+    },
+
+    /**
+     * Cross-origin allowed domains
+     */
+    allowedDomains: [
+        'http://localhost:8000'
+    ]
 };
