@@ -18,7 +18,7 @@ describe('Board Controller', function(){
             BoardController.findOne({ _id: 0 }).should.be.instanceOf(Promise);
         });
 
-        it('should fail when passing and invalid board id', function(done){
+        it('should fail when passing an invalid board id', function(done){
             BoardController.findOne({ _id: 0 }).then(null, function(err){
                 done();
             });
@@ -43,9 +43,9 @@ describe('Board Controller', function(){
             });
         });
 
-        it('should emit a global "board:created" event after document creation', function(done){
-            Events.once('board:created', function(b){
-                b.should.be.instanceOf(BoardModel);
+        it('should emit a global "board:create" event after document creation', function(done){
+            Events.once('board:create', function(b){
+                b.should.not.be.null;
                 done();
             });
             BoardController.create();

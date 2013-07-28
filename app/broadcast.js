@@ -9,9 +9,9 @@ var channel = function(name){
     return name + (config.isDevelopment ? '-dev' : '');
 };
 
-Events.on('board:created', function(boardId){
+Events.on('board:create', function(boardId){
     pubnub.publish({
-        channel: channel('board:created'),
+        channel: channel('board:create'),
         message: {
             boardId: boardId
         }
@@ -28,21 +28,21 @@ Events.on('board:join', function(boardId, playerId){
     });
 });
 
-Events.on('board:ready', function(boardId){
-    pubnub.publish({
-        channel: channel('board:ready'),
-        message: {
-            boardId: boardId
-        }
-    });
-});
-
 Events.on('board:leave', function(boardId, playerId){
     pubnub.publish({
         channel: channel('board:leave'),
         message: {
             boardId: boardId,
             playerId: playerId
+        }
+    });
+});
+
+Events.on('board:ready', function(boardId){
+    pubnub.publish({
+        channel: channel('board:ready'),
+        message: {
+            boardId: boardId
         }
     });
 });

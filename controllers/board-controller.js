@@ -37,7 +37,7 @@ var BoardController = {
 
         BoardModel.create({}, promise.resolve.bind(promise));
         promise.then(function(model){
-            Events.emit('board:created', model._id);
+            Events.emit('board:create', model._id);
         });
 
         return promise;
