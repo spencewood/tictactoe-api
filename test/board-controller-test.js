@@ -9,7 +9,6 @@ var BoardModel = require('../models/board-model');
 describe('Board Controller', function(){
     after(function(){
         BoardModel.remove({}, function(err){
-            console.log('cleaned up');
         });
     });
 
