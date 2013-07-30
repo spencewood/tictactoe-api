@@ -237,5 +237,14 @@ describe('Board Controller', function(){
                 BoardController.play(model._id, 2, 0);
             });
         });
+
+        it('should throw an error when trying to play with a playerid that isn\'t in the player list', function(done){
+            BoardModel.create({}, function(err, model){
+                BoardController.play(model._id, 2, 1).then(null, function(err){
+                    err.should.not.be.null;
+                    done();
+                });
+            });
+        });
     });
 });

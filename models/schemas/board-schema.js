@@ -12,7 +12,10 @@ var BoardSchema = new Schema({
         type: [Number],
         default: [2, 2, 2, 2, 2, 2, 2, 2, 2]
     },
-    players: [Number],
+    players: {
+        type: [Number],
+        default: []
+    },
     isComplete: {
         type: Boolean,
         default: false

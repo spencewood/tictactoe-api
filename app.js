@@ -41,7 +41,9 @@ require('./app/broadcast');
 app.get('/boards', boards.fetch);
 app.post('/boards', boards.create);
 app.post('/boards/addplayer', boards.addPlayer);
-app.post('/board/sremovePlayer', boards.removePlayer);
+app.post('/boards/join', boards.addPlayer);
+app.post('/boards/removePlayer', boards.removePlayer);
+app.post('/boards/leave', boards.removePlayer);
 app.post('/boards/play', boards.play);
 
 http.createServer(app).listen(app.get('port'), function(){

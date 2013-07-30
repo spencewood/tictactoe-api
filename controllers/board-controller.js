@@ -92,6 +92,7 @@ var BoardController = {
             try{
                 b.play(spot, getPlayerNum(b.players, playerId));
             } catch(e){
+                console.log('rejecting', e);
                 promise.reject(e);
             }
 
