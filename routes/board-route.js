@@ -16,11 +16,11 @@ exports.create = function(req, res){
 };
 
 exports.addPlayer = function(req, res, next){
-    if(req.body.boardid === null || req.body.playerid === null){
+    if(req.body.boardId === null || req.body.playerId === null){
         res.send(500, 'Invalid parameters');
     }
 
-    BoardController.addPlayer(req.body.boardid, req.body.playerid).then(function(b){
+    BoardController.addPlayer(req.body.boardId, req.body.playerId).then(function(b){
         res.send({
             success: true
         });
@@ -28,11 +28,11 @@ exports.addPlayer = function(req, res, next){
 };
 
 exports.removePlayer = function(req, res, next){
-    if(req.body.boardid === null || req.body.playerid === null){
+    if(req.body.boardId === null || req.body.playerId === null){
         res.send(500, 'Invalid parameters');
     }
 
-    BoardController.removePlayer(req.body.boardid, req.body.playerid).then(function(b){
+    BoardController.removePlayer(req.body.boardId, req.body.playerId).then(function(b){
         res.send({
             success: true
         });
@@ -40,13 +40,13 @@ exports.removePlayer = function(req, res, next){
 };
 
 exports.play = function(req, res, next){
-    if(req.body.boardid === null ||
-        req.body.playerid === null ||
+    if(req.body.boardId === null ||
+        req.body.playerId === null ||
         req.body.spot === null){
         res.send(500, 'Invalid parameters');
     }
 
-    BoardController.play(req.body.boardid, req.body.playerid, req.body.spot).then(function(b){
+    BoardController.play(req.body.boardId, req.body.playerId, req.body.spot).then(function(b){
         res.send({
             success: true
         });
