@@ -6,7 +6,7 @@ var BoardSchema = new Schema({
         type: Number,
         default: 0,        
         min: 0,
-        max: 8
+        max: 9
     },
     spots: {
         type: [Number],

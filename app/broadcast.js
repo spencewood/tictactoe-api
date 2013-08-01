@@ -9,16 +9,16 @@ var channel = function(name){
     return name + (config.isDevelopment ? '-dev' : '');
 };
 
-Events.on('board:create', function(boardId){
+Events.on('board:create', function(board){
     pubnub.publish({
         channel: channel('board:create'),
         message: {
-            boardId: boardId
+            boardId: board._id
         }
     });
 });
 
-Events.on('board:join', function(boardId, playerId){
+Events.on('board:join', function(board, boardId, playerId){
     pubnub.publish({
         channel: channel('board:join'),
         message: {
@@ -28,7 +28,7 @@ Events.on('board:join', function(boardId, playerId){
     });
 });
 
-Events.on('board:leave', function(boardId, playerId){
+Events.on('board:leave', function(board, boardId, playerId){
     pubnub.publish({
         channel: channel('board:leave'),
         message: {
@@ -38,7 +38,7 @@ Events.on('board:leave', function(boardId, playerId){
     });
 });
 
-Events.on('board:ready', function(boardId){
+Events.on('board:ready', function(board, boardId){
     pubnub.publish({
         channel: channel('board:ready'),
         message: {
@@ -47,18 +47,18 @@ Events.on('board:ready', function(boardId){
     });
 });
 
-Events.on('board:move', function(boardId, playerId, spot){
+Events.on('board:move', function(board, boardId, playerId, spot){
     pubnub.publish({
         channel: channel('board:move'),
         message: {
             boardId: boardId,
             playerId: playerId,
-            spot: spot
+            spots: board.spots
         }
     });
 });
 
-Events.on('board:complete', function(boardId){
+Events.on('board:complete', function(board, boardId){
     pubnub.publish({
         channel: channel('board:complete'),
         message: {

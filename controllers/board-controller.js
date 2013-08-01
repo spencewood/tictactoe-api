@@ -4,12 +4,12 @@ var BoardModel = require('../models/board-model');
 var Events = require('../events');
 var Promise = require('mongoose').Promise;
 
-var getPlayerNum = function(players, playerId){
+var getPlayerNum = function(players, playerId, turn){
     var index = players.indexOf(playerId);
     if(index === -1){
         throw 'Invalid player';
     }
-    return index === 0 ? 3 : 5;
+    return turn % 2 === 0 ? 3 : 5;
 };
 
 var BoardController = {
@@ -28,7 +28,9 @@ var BoardController = {
     all: function(fields){
         fields = fields || [];
         var promise = new Promise();
+
         BoardModel.find({}, fields.join(' '), promise.resolve.bind(promise));
+        
         return promise;
     },
 
@@ -37,7 +39,7 @@ var BoardController = {
 
         BoardModel.create({}, promise.resolve.bind(promise));
         promise.then(function(model){
-            Events.emit('board:create', model._id);
+            Events.emit('board:create', model);
         });
 
         return promise;
@@ -56,10 +58,10 @@ var BoardController = {
             b.save(promise.resolve.bind(promise));
         }, promise.reject.bind(promise));
 
-        promise.then(function(b){
-            Events.emit('board:join', boardId, playerId);
-            if(b.players.length === 2){
-                Events.emit('board:ready', boardId);
+        promise.then(function(model){
+            Events.emit('board:join', model, boardId, playerId);
+            if(model.players.length === 2){
+                Events.emit('board:ready', model, boardId);
             }
         });
 
@@ -80,7 +82,7 @@ var BoardController = {
         }, promise.reject.bind(promise));
 
         promise.then(function(model){
-            Events.emit('board:leave', boardId, playerId);
+            Events.emit('board:leave', model, boardId, playerId);
         });
 
         return promise;
@@ -88,11 +90,11 @@ var BoardController = {
 
     play: function(boardId, playerId, spot){
         var promise = new Promise();
+
         this.findById(boardId).then(function(b){
             try{
-                b.play(spot, getPlayerNum(b.players, playerId));
+                b.play(spot, getPlayerNum(b.players, playerId, b.turn));
             } catch(e){
-                console.log('rejecting', e);
                 promise.reject(e);
             }
 
@@ -100,9 +102,9 @@ var BoardController = {
         }, promise.reject.bind(promise));
 
         promise.then(function(model){
-            Events.emit('board:move', boardId, playerId, spot);
+            Events.emit('board:move', model, boardId, playerId, spot);
             if(model.isComplete){
-                Events.emit('board:complete', boardId);
+                Events.emit('board:complete', model, boardId);
             }
         });
 

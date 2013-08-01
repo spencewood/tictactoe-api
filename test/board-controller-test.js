@@ -35,7 +35,7 @@ describe('Board Controller', function(){
             BoardController.create().should.be.instanceOf(Promise);
         });
 
-        it('should resolve with the new model id', function(done){
+        it('should resolve with the new model', function(done){
             BoardController.create().then(function(b){
                 b.should.not.be.null;
                 done();
@@ -74,7 +74,8 @@ describe('Board Controller', function(){
         });
 
         it('should raise an event with board and player id when a player joins a board', function(done){
-            Events.once('board:join', function(boardId, playerId){
+            Events.once('board:join', function(model, boardId, playerId){
+                model.should.not.be.null;
                 boardId.should.not.be.null;
                 playerId.should.not.be.null;
                 done();
@@ -137,7 +138,8 @@ describe('Board Controller', function(){
         });
 
         it('should emit a "board:leave" event with the boardid and playerid', function(done){
-            Events.once('board:leave', function(boardId, playerId){
+            Events.once('board:leave', function(model, boardId, playerId){
+                model.should.not.be.null;
                 boardId.should.not.be.null;
                 playerId.should.not.be.null;
                 done();
@@ -181,7 +183,8 @@ describe('Board Controller', function(){
         });
 
         it('should emit a "board:move" event with board, player and spot', function(done){
-            Events.once('board:move', function(boardId, playerId, spot){
+            Events.once('board:move', function(model, boardId, playerId, spot){
+                model.should.not.be.null;
                 boardId.should.not.be.null;
                 playerId.should.not.be.null;
                 spot.should.not.be.null;
@@ -245,6 +248,14 @@ describe('Board Controller', function(){
                     done();
                 });
             });
+        });
+
+        it('should throw an error if the player plays out of turn', function(done){
+
+        });
+
+        it('should not let the same player join twice', function(done){
+
         });
     });
 });
