@@ -7,6 +7,9 @@ schema.methods.addPlayer = function(playerId){
     if(this.isReady()){
         throw 'Unable to add more players';
     }
+    else if(this.players.indexOf(playerId) >= 0){
+        throw 'Player already added';
+    }
     else if(this.players.length < 2){
         this.players.push(playerId);
     }

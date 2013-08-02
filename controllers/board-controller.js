@@ -4,12 +4,22 @@ var BoardModel = require('../models/board-model');
 var Events = require('../events');
 var Promise = require('mongoose').Promise;
 
-var getPlayerNum = function(players, playerId, turn){
+var getSpotValue = function(turn){
+    return turn % 2 === 0 ? 3 : 5;
+};
+
+var ensureCorrectPlayer = function(players, playerId){
     var index = players.indexOf(playerId);
     if(index === -1){
         throw 'Invalid player';
     }
-    return turn % 2 === 0 ? 3 : 5;
+}
+
+var ensureCorrectTurn = function(players, playerId, turn){
+    var index = players.indexOf(playerId);
+    if(turn % 2 !== index){
+        throw 'Playing out of turn';
+    }
 };
 
 var BoardController = {
@@ -93,7 +103,9 @@ var BoardController = {
 
         this.findById(boardId).then(function(b){
             try{
-                b.play(spot, getPlayerNum(b.players, playerId, b.turn));
+                ensureCorrectPlayer(b.players, playerId);
+                ensureCorrectTurn(b.players, playerId, b.turn);
+                b.play(spot, getSpotValue(b.turn));
             } catch(e){
                 promise.reject(e);
             }

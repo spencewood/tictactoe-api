@@ -13,7 +13,7 @@ var BoardSchema = new Schema({
         default: [2, 2, 2, 2, 2, 2, 2, 2, 2]
     },
     players: {
-        type: [Number],
+        type: [String],
         default: []
     },
     isComplete: {

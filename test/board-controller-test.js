@@ -104,6 +104,15 @@ describe('Board Controller', function(){
                 BoardController.addPlayer(model._id, 2);
             });
         });
+
+        it('should not let the same player join twice', function(done){
+            BoardModel.create({ players: [1] }, function(err, model){
+                BoardController.addPlayer(model._id, 1).then(null, function(err){
+                    err.should.not.be.null;
+                    done();
+                });
+            });
+        });
     });
 
     describe('#removePlayer', function(){
@@ -164,7 +173,7 @@ describe('Board Controller', function(){
             });
         });
 
-        it('should add a 3 for player 1 in the chosen spot', function(done){
+        it('should add a 3 for turn 0 in the chosen spot', function(done){
             BoardModel.create({ players: [1, 2] }, function(err, model){
                 BoardController.play(model._id, 1, 1).then(function(b){
                     b.getSpots()[1].should.equal(3);
@@ -173,8 +182,8 @@ describe('Board Controller', function(){
             });
         });
 
-        it('should add a 5 for player 2 in the chosen spot', function(done){
-            BoardModel.create({ players: [1, 2] }, function(err, model){
+        it('should add a 5 for turn 1 in the chosen spot', function(done){
+            BoardModel.create({ players: [1, 2], turn: 1 }, function(err, model){
                 BoardController.play(model._id, 2, 1).then(function(b){
                     b.getSpots()[1].should.equal(5);
                     done();
@@ -209,7 +218,7 @@ describe('Board Controller', function(){
 
         it('should increment the turn', function(done){
             BoardModel.create({ players: [1, 2] }, function(err, model){
-                BoardController.play(model._id, 2, 1).then(function(b){
+                BoardController.play(model._id, 1, 1).then(function(b){
                     b.getTurn().should.equal(1);
                     done();
                 });
@@ -221,7 +230,7 @@ describe('Board Controller', function(){
                 players: [1, 2],
                 spots: [2, 3, 5, 3, 5, 3, 5, 3, 5]
             }, function(err, model){
-                BoardController.play(model._id, 2, 0).then(function(b){
+                BoardController.play(model._id, 1, 0).then(function(b){
                     b.isComplete.should.be.true;
                     done();
                 });
@@ -237,7 +246,7 @@ describe('Board Controller', function(){
                 players: [1, 2],
                 spots: [2, 3, 5, 3, 5, 3, 5, 3, 5]
             }, function(err, model){
-                BoardController.play(model._id, 2, 0);
+                BoardController.play(model._id, 1, 0);
             });
         });
 
@@ -251,11 +260,12 @@ describe('Board Controller', function(){
         });
 
         it('should throw an error if the player plays out of turn', function(done){
-
-        });
-
-        it('should not let the same player join twice', function(done){
-
+            BoardModel.create({ players: [1, 2] }, function(err, model){
+                BoardController.play(model._id, 2, 0).then(null, function(err){
+                    err.should.not.be.null;
+                    done();
+                });
+            });
         });
     });
 });
