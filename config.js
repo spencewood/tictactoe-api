@@ -10,6 +10,7 @@ module.exports = {
         subscribe_key: process.env.PUBNUB_SUBSCRIBE_KEY || 'demo',
         publish_key: process.env.PUBNUB_PUBLISH_KEY || 'demo'
     },
+    sessionKey: process.env.SESSION_KEY || 'super secret key',
 
     /**
      * Cross-origin allowed domains

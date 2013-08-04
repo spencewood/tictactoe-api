@@ -1,4 +1,3 @@
-var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var BoardModel = require('../models/board-model');
 var Events = require('../events');
@@ -13,7 +12,7 @@ var ensureCorrectPlayer = function(players, playerId){
     if(index === -1){
         throw 'Invalid player';
     }
-}
+};
 
 var ensureCorrectTurn = function(players, playerId, turn){
     var index = players.indexOf(playerId);
