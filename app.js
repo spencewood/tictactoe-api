@@ -7,14 +7,22 @@ if(process.env.NODETIME_ACCOUNT_KEY) {
 
 var express = require('express');
 var passport = require('passport');
-var boards = require('./routes/board-route');
+var BearerStrategy = require('passport-http-bearer').Strategy;
+var boards = require('./routes/boards-route');
+var accounts = require('./routes/accounts-route');
 var cors = require('./routes/cors');
 var http = require('http');
 var config = require('./config');
+var User = require('./controllers/user-controller');
 
 var app = express();
+passport.use(
+    new BearerStrategy(function(token, done){
+        User.findByToken(token).then(done);
+    })
+);
 
-var errorHandler = function(err, req, res, next){
+var errorHandler = function(err, req, res){
     console.error(err);
     res.send(500, { error: err });
 };
