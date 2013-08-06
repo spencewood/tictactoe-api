@@ -57,6 +57,7 @@ app.post('/boards/join', boards.addPlayer);
 app.post('/boards/removePlayer', boards.removePlayer);
 app.post('/boards/leave', boards.removePlayer);
 app.post('/boards/play', boards.play);
+app.post('/accounts/requestLogin', accounts.requestLogin);
 app.post('/accounts/login', accounts.login);
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -6,6 +6,7 @@
 var Promise = require('mongoose').Promise;
 var UserController = require('../controllers/user-controller');
 var UserModel = require('../models/user-model');
+var Events = require('../events');
 
 require('should');
 
@@ -55,6 +56,14 @@ describe('Board Controller', function(){
                     done();
                 });
             });
+        });
+
+        it('should emit a global "user:loginEmail" event with user model', function(done){
+            Events.once('user:loginEmail', function(model){
+                model.should.not.be.null;
+                done();
+            });
+            UserController.sendLoginEmail('test3@test.com');
         });
     });
 });

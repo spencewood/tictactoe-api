@@ -9,6 +9,9 @@ var channel = function(name){
     return name + (config.isDevelopment ? '-dev' : '');
 };
 
+/**
+ * Board Events
+ */
 Events.on('board:create', function(board){
     pubnub.publish({
         channel: channel('board:create'),
@@ -63,6 +66,19 @@ Events.on('board:complete', function(board, boardId){
         channel: channel('board:complete'),
         message: {
             boardId: boardId
+        }
+    });
+});
+
+/**
+ * User Events
+ */
+Events.on('user:loginEmail', function (user){
+    pubnub.publish({
+        channel: channel('user:loginEmail'),
+        message: {
+            token: user.token,
+            email: user.email
         }
     });
 });

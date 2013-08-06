@@ -1,5 +1,6 @@
 var UserModel = require('../models/user-model');
 var Promise = require('mongoose').Promise;
+var Events = require('../events');
 
 var UserController = {
     findOne: function(query){
@@ -16,7 +17,12 @@ var UserController = {
 
     sendLoginEmail: function(email){
         var promise = new Promise();
+
         UserModel.findOrCreate({ email: email }, promise.resolve.bind(promise));
+        promise.then(function(model){
+            Events.emit('user:loginEmail', model);
+        });
+
         return promise;
     }
 };
