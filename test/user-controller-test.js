@@ -7,6 +7,8 @@ var Promise = require('mongoose').Promise;
 var UserController = require('../controllers/user-controller');
 var UserModel = require('../models/user-model');
 
+require('should');
+
 describe('Board Controller', function(){
     after(function(){
         UserModel.remove({}, function(err){
