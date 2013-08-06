@@ -1,34 +1,37 @@
 {
-    "name": "tictactoe-worker",
-    "version": "0.0.1",
-    "private": true,
-    "repository" : {
-        "type" : "git",
-        "url" : "https://github.com/tcollard/tictactoe-api"
-    },
-    "author": "Tyler Spencewood",
-    "license": "BSD",
-    "scripts": {
-        "start": "node app.js"
-    },
-    "dependencies": {
-        "underscore": "1.4.x",
-        "pubnub": "3.4.x",
-        "express": "*",
-        "mongoose": "*",
-        "passport": "*",
-        "passport-http-bearer": "*"
-    },
-    "devDependencies": {
-        "mocha": "*",
-        "should": "*",
-        "sinon": "*",
-        "grunt": "*",
-        "grunt-contrib-jshint": "*",
-        "grunt-contrib-watch": "*"
-    },
-    "engines": {
-        "node": "0.10.x",
-        "npm": "1.2.x"
-    }
+  "name": "tictactoe-worker",
+  "version": "0.0.1",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tcollard/tictactoe-api"
+  },
+  "author": "Tyler Spencewood",
+  "license": "BSD",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "underscore": "1.4.x",
+    "pubnub": "3.4.x",
+    "express": "*",
+    "mongoose": "*",
+    "mongoose-types": "*",
+    "passport": "~0.1.17",
+    "passport-http-bearer": "~1.0.1",
+    "node-uuid": "~1.4.0",
+    "mongoose-findorcreate": "~0.1.2"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "sinon": "*",
+    "grunt": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-watch": "*"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  }
 }
