@@ -8,6 +8,8 @@ var Promise = require('mongoose').Promise;
 var BoardController = require('../controllers/board-controller');
 var BoardModel = require('../models/board-model');
 
+require('should');
+
 describe('Board Controller', function(){
     after(function(){
         BoardModel.remove({}, function(err){

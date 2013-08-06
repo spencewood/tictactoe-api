@@ -6,6 +6,8 @@
         "type" : "git",
         "url" : "https://github.com/tcollard/tictactoe-api"
     },
+    "author": "Tyler Spencewood",
+    "license": "BSD",
     "scripts": {
         "start": "node app.js"
     },
