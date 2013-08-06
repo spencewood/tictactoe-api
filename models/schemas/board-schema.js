@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var BoardSchema = new Schema({
     turn: {
         type: Number,
-        default: 0,        
+        default: 0,
         min: 0,
         max: 9
     },

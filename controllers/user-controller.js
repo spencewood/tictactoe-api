@@ -1,6 +1,4 @@
-var EventEmitter = require('events').EventEmitter;
 var UserModel = require('../models/user-model');
-var Events = require('../events');
 var Promise = require('mongoose').Promise;
 
 var UserController = {

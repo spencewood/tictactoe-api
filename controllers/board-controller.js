@@ -1,4 +1,3 @@
-var EventEmitter = require('events').EventEmitter;
 var BoardModel = require('../models/board-model');
 var Events = require('../events');
 var Promise = require('mongoose').Promise;

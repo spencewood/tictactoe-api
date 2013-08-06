@@ -1,3 +1,3 @@
-var User = require('../controllers/user-controller');
+//var User = require('../controllers/user-controller');
 
 exports.login = function(){};

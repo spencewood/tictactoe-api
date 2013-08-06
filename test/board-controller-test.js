@@ -1,6 +1,8 @@
-var EventEmitter = require('events').EventEmitter;
-var should = require('should');
-var _ = require('underscore');
+/*jshint expr: true*/
+/*global describe: true*/
+/*global it: true*/
+/*global after: true*/
+
 var Events = require('../events');
 var Promise = require('mongoose').Promise;
 var BoardController = require('../controllers/board-controller');
