@@ -7,7 +7,7 @@ exports.requestLogin = function(req, res, next){
 };
 
 exports.whoAmI = function(req, res, next){
-    User.findByToken(req.body.token).then(function(u){
+    User.findByToken(req.query.access_token).then(function(u){
         res.send(u);
     }, next);
 };
