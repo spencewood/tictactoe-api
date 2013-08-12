@@ -22,7 +22,10 @@ passport.use(
     })
 );
 
-var errorHandler = function(err, req, res){
+var errorHandler = function(err, req, res, next){
+    if(!err){
+        return next();
+    }
     console.error(err);
     res.send(500, { error: err });
 };
@@ -58,7 +61,7 @@ app.post('/boards/removePlayer', boards.removePlayer);
 app.post('/boards/leave', boards.removePlayer);
 app.post('/boards/play', boards.play);
 app.post('/accounts/requestLogin', accounts.requestLogin);
-app.post('/accounts/login', accounts.login);
+app.post('/accounts/whoAmI', accounts.whoAmI);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));

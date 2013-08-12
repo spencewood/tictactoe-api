@@ -6,6 +6,8 @@ exports.requestLogin = function(req, res, next){
     }, next);
 };
 
-exports.login = function(){
-
+exports.whoAmI = function(req, res, next){
+    User.findByToken(req.body.token).then(function(u){
+        res.send(u);
+    }, next);
 };
