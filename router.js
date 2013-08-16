@@ -30,9 +30,9 @@ module.exports = function(app, passport){
 
     //routes
     app.get('/boards', boards.fetch);
+    app.post('/accounts/requestLogin', accounts.requestLogin);
 
     app.get('/accounts/whoAmI', passport.authenticate('bearer', { session: false }), accounts.whoAmI);
-    app.post('/accounts/requestLogin', passport.authenticate('bearer', { session: false }), accounts.requestLogin);
     app.post('/boards', passport.authenticate('bearer', { session: false }), boards.create);
     app.post('/boards/addplayer', passport.authenticate('bearer', { session: false }), boards.addPlayer);
     app.post('/boards/join', passport.authenticate('bearer', { session: false }), boards.addPlayer);

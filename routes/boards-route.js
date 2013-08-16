@@ -7,11 +7,13 @@ exports.fetch = function(req, res){
 };
 
 exports.create = function(req, res){
-    BoardController.create().then(function(b){
-        res.send({
-            id: b.id
+    BoardController.create()
+        .then(BoardController.addPlayer(b.id, req.user.id))
+        .then(function(b){
+            res.send({
+                id: b.id
+            });
         });
-    });
 };
 
 exports.addPlayer = function(req, res, next){
