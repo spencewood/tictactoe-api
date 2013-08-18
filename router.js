@@ -13,7 +13,7 @@ var bearer = new BearerStrategy(function(token, done){
     });
 });
 
-// error handling
+//error handling
 var errorHandler = function(err, req, res, next){
     if(!err){
         return next();
@@ -28,15 +28,18 @@ module.exports = function(app, passport){
     app.use(app.router);
     app.use(errorHandler);
 
+    //auth
+    var requireToken = passport.authenticate('bearer', { session: false });
+
     //routes
     app.get('/boards', boards.fetch);
     app.post('/accounts/requestLogin', accounts.requestLogin);
 
-    app.get('/accounts/whoAmI', passport.authenticate('bearer', { session: false }), accounts.whoAmI);
-    app.post('/boards', passport.authenticate('bearer', { session: false }), boards.create);
-    app.post('/boards/addplayer', passport.authenticate('bearer', { session: false }), boards.addPlayer);
-    app.post('/boards/join', passport.authenticate('bearer', { session: false }), boards.addPlayer);
-    app.post('/boards/removePlayer', passport.authenticate('bearer', { session: false }), boards.removePlayer);
-    app.post('/boards/leave', passport.authenticate('bearer', { session: false }), boards.removePlayer);
-    app.post('/boards/play', passport.authenticate('bearer', { session: false }), boards.play);
+    app.get('/accounts/whoAmI', requireToken, accounts.whoAmI);
+    app.post('/boards', requireToken, boards.create);
+    app.post('/boards/addplayer', requireToken, boards.addPlayer);
+    app.post('/boards/join', requireToken, boards.addPlayer);
+    app.post('/boards/removePlayer', requireToken, boards.removePlayer);
+    app.post('/boards/leave', requireToken, boards.removePlayer);
+    app.post('/boards/play', requireToken, boards.play);
 };

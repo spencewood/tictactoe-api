@@ -73,7 +73,7 @@ Events.on('board:complete', function(board, boardId){
 /**
  * User Events
  */
-Events.on('user:loginEmail', function (user){
+Events.on('user:loginEmail', function(user){
     pubnub.publish({
         channel: channel('user:loginEmail'),
         message: {
