@@ -6,7 +6,7 @@ exports.fetch = function(req, res){
     });
 };
 
-exports.create = function(req, res){
+exports.create = function(req, res, next){
     BoardController.create()
         .then(function(b){
             return BoardController.addPlayer(b.id, req.user.id);
@@ -15,7 +15,7 @@ exports.create = function(req, res){
             res.send({
                 id: b.id
             });
-        });
+        }, next);
 };
 
 exports.addPlayer = function(req, res, next){

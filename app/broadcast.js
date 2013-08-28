@@ -50,9 +50,9 @@ Events.on('board:ready', function(board, boardId){
     });
 });
 
-Events.on('board:move', function(board, boardId, playerId, spot){
+Events.on('board:play', function(board, boardId, playerId, spot){
     pubnub.publish({
-        channel: channel('board:move'),
+        channel: channel('board:play'),
         message: {
             boardId: boardId,
             playerId: playerId,

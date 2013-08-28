@@ -15,4 +15,8 @@ describe('Board Routes', function(){
         BoardModel.remove({}, function(err){
         });
     });
+
+    describe('create', function(){
+        //add one for making sure that a created board adds the current player
+    });
 });

@@ -1,6 +1,13 @@
 var BoardModel = require('../models/board-model');
 var Events = require('../events');
 var Promise = require('mongoose').Promise;
+var _ = require('underscore');
+
+var getOtherPlayer = function(players, playerId){
+    return _.reject(players, function(num){
+        return num === playerId;
+    }).pop();
+};
 
 var getSpotValue = function(turn){
     return turn % 2 === 0 ? 3 : 5;
@@ -56,14 +63,14 @@ var BoardController = {
     addPlayer: function(boardId, playerId){
         var promise = new Promise();
 
-        this.findById(boardId).then(function(b){
+        this.findById(boardId).then(function(board){
             try{
-                b.addPlayer(playerId);
+                board.addPlayer(playerId);
             } catch(e){
                 promise.reject(e);
             }
 
-            b.save(promise.resolve.bind(promise));
+            board.save(promise.resolve.bind(promise));
         }, promise.reject.bind(promise));
 
         promise.then(function(model){
@@ -79,14 +86,14 @@ var BoardController = {
     removePlayer: function(boardId, playerId){
         var promise = new Promise();
 
-        this.findById(boardId).then(function(b){
+        this.findById(boardId).then(function(board){
             try{
-                b.removePlayer(playerId);
+                board.removePlayer(playerId);
             } catch(e){
                 promise.reject(e);
             }
 
-            b.save(promise.resolve.bind(promise));
+            board.save(promise.resolve.bind(promise));
         }, promise.reject.bind(promise));
 
         promise.then(function(model){
@@ -99,22 +106,25 @@ var BoardController = {
     play: function(boardId, playerId, spot){
         var promise = new Promise();
 
-        this.findById(boardId).then(function(b){
+        this.findById(boardId).then(function(board){
             try{
-                ensureCorrectPlayer(b.players, playerId);
-                ensureCorrectTurn(b.players, playerId, b.turn);
-                b.play(spot, getSpotValue(b.turn));
+                ensureCorrectPlayer(board.players, playerId);
+                ensureCorrectTurn(board.players, playerId, board.turn);
+                board.play(spot, getSpotValue(board.turn));
             } catch(e){
                 promise.reject(e);
             }
 
-            b.save(promise.resolve.bind(promise));
+            board.save(promise.resolve.bind(promise));
         }, promise.reject.bind(promise));
 
         promise.then(function(model){
-            Events.emit('board:move', model, boardId, playerId, spot);
+            Events.emit('board:play', model, boardId, playerId, spot);
             if(model.isComplete){
                 Events.emit('board:complete', model, boardId);
+            }
+            else{
+                Events.emit('board:turn', boardId, getOtherPlayer(model.players, playerId));
             }
         });
 

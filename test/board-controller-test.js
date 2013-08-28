@@ -195,8 +195,8 @@ describe('Board Controller', function(){
             });
         });
 
-        it('should emit a "board:move" event with board, player and spot', function(done){
-            Events.once('board:move', function(model, boardId, playerId, spot){
+        it('should emit a "board:play" event with board, player and spot', function(done){
+            Events.once('board:play', function(model, boardId, playerId, spot){
                 model.should.not.be.null;
                 boardId.should.not.be.null;
                 playerId.should.not.be.null;
@@ -249,6 +249,19 @@ describe('Board Controller', function(){
             BoardModel.create({
                 players: [1, 2],
                 spots: [2, 3, 5, 3, 5, 3, 5, 3, 5]
+            }, function(err, model){
+                BoardController.play(model._id, 1, 0);
+            });
+        });
+
+        it('should raise global "board:turn" event with boardid and correct playerid when there is a new turn', function(done){
+            Events.once('board:turn', function(boardId, playerId){
+                boardId.should.not.be.null;
+                playerId.should.equal('2');
+                done();
+            });
+            BoardModel.create({
+                players: [1, 2]
             }, function(err, model){
                 BoardController.play(model._id, 1, 0);
             });
