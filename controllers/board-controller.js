@@ -124,7 +124,7 @@ var BoardController = {
                 Events.emit('board:complete', model, boardId);
             }
             else{
-                Events.emit('board:turn', boardId, getOtherPlayer(model.players, playerId));
+                Events.emit('board:turn', model, boardId, getOtherPlayer(model.players, playerId));
             }
         });
 

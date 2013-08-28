@@ -242,7 +242,8 @@ describe('Board Controller', function(){
         });
 
         it('should raise global event with boardid when board is complete', function(done){
-            Events.once('board:complete', function(boardId){
+            Events.once('board:complete', function(board, boardId){
+                board.should.not.be.null;
                 boardId.should.not.be.null;
                 done();
             });
@@ -255,7 +256,8 @@ describe('Board Controller', function(){
         });
 
         it('should raise global "board:turn" event with boardid and correct playerid when there is a new turn', function(done){
-            Events.once('board:turn', function(boardId, playerId){
+            Events.once('board:turn', function(board, boardId, playerId){
+                board.should.not.be.null;
                 boardId.should.not.be.null;
                 playerId.should.equal('2');
                 done();
