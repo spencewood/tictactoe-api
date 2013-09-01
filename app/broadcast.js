@@ -61,6 +61,19 @@ Events.on('board:play', function(board, boardId, playerId, spot){
     });
 });
 
+Events.on('board:turn', function(board, boardId, playerId){
+    //only broadcast if the turn is for a real player
+    if(playerId !== 0){
+        pubnub.publish({
+            channel: channel('board:turn'),
+            message: {
+                boardId: boardId,
+                playerId: playerId
+            }
+        });
+    }
+});
+
 Events.on('board:complete', function(board, boardId){
     pubnub.publish({
         channel: channel('board:complete'),
