@@ -4,6 +4,7 @@ var pubnub = require('pubnub').init({
     subscribe_key: config.pubnub.subscribe_key
 });
 var Events = require('../events');
+var AI = require('./ai');
 
 var channel = function(name){
     return name + (config.isDevelopment ? '-dev' : '');
@@ -62,8 +63,12 @@ Events.on('board:play', function(board, boardId, playerId, spot){
 });
 
 Events.on('board:turn', function(board, boardId, playerId){
-    //only broadcast if the turn is for a real player
-    if(playerId !== 0){
+    if(playerId === 0){
+        //AI plays if the playerId is 0
+        AI.play(boardId);
+    }
+    else{
+        //only broadcast if the turn is for a real player
         pubnub.publish({
             channel: channel('board:turn'),
             message: {
