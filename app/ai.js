@@ -1,10 +1,17 @@
 var BoardController = require('../controllers/board-controller');
 var _ = require('underscore');
 
-var sum = function(arr){
-    _.reduce(arr, function(memo, num){
-        return memo + num;
-    }, 0);
+var multiply = function(arr){
+    return _.reduce(arr, function(memo, num){
+        return memo * num;
+    });
+};
+
+var firstRandomValue = function(arr){
+    return _.chain(arr)
+        .shuffle()
+        .first()
+        .value();
 };
 
 var getWinCombos = function(){
@@ -17,46 +24,43 @@ var getWinCombos = function(){
     ];
 };
 
-var getSpotCombos = function(spots){
-    return _.map(getWinCombos(), function(row){
-        return _.map(row, function(spot){
-            return spots[spot];
-        });
-    });
-};
-
-var checkCombos = function(spots){
-    return _.map(getSpotCombos(spots), sum);
-};
-
 var winPossible = function(spots){
-    return _.find(checkCombos(spots), function(num){
-        return num === 18 || num === 50;
+    var possibilities = [];
+    _.each(getWinCombos(), function(combo){
+        var product = multiply(_.map(combo, function(spot){
+            return spots[spot];
+        }));
+
+        if(product === 18 || product === 50){
+            possibilities.push(_.indexOf(combo, 2));
+        }
     });
+    return possibilities;
 };
 
-var getOpenSpotIndexes = function(spots){
-    return _.chain(spots).map(function(num, idx){
-            if(num === 2){
-                return idx;
-            }
-        })
-        .compact()
-        .value();
+var getWinPossibility = function(spots){
+    return firstRandomValue(winPossible(spots));
+};
+
+var allIndexesOf = function(spots, item){
+    var indexes = [];
+    for(var i = 0; i < spots.length; i++){
+        if(spots[i] === item){
+            indexes.push(i);
+        }
+    }
+    return indexes;
 };
 
 var getRandomOpenSpot = function(spots){
-    return _.chain(getOpenSpotIndexes(spots))
-        .shuffle()
-        .first()
-        .value();
+    return firstRandomValue(allIndexesOf(spots, 2));
 };
 
 var getSpot = function(board){
     var spots = board.getSpots();
-
+    
     if(board.getTurn() > 3){
-        var spot = winPossible(spots);
+        var spot = getWinPossibility(spots);
         if(typeof spot !== 'undefined'){
             return spot;
         }
@@ -67,7 +71,8 @@ var getSpot = function(board){
 var AI = {
     play: function(boardId){
         return BoardController.findById(boardId).then(function(board){
-            return BoardController.play(boardId, 0, getSpot(board));
+            var spot = getSpot(board);
+            return BoardController.play(boardId, 0, spot);
         });
     }
 };

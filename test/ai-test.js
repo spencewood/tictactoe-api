@@ -45,5 +45,18 @@ describe('Board Routes', function(){
                 });
             });
         });
+
+        it('should block opponent from winning', function(done){
+            BoardModel.create({
+                players: [0, 1],
+                spots: [5, 5, 2, 3, 2, 2, 2, 3, 2],
+                turn: 4
+            }, function(err, model){
+                AI.play(model._id).then(function(board){
+                    board.getSpots()[2].should.equal(3);
+                    done();
+                });
+            });
+        });
     });
 });

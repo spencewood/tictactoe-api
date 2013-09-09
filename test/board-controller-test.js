@@ -73,7 +73,7 @@ describe('Board Controller', function(){
                 BoardController.addPlayer(b._id, 1).then(function(m){
                     m.players.length.should.equal(1);
                     done();
-                }).end();
+                });
             });
         });
 
