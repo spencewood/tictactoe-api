@@ -94,7 +94,7 @@ describe('Board Controller', function(){
                 BoardController.addPlayer(model._id, 3).then(null, function(err){
                     err.should.not.be.null;
                     done();
-                }).end();
+                });
             });
         });
 
@@ -122,15 +122,6 @@ describe('Board Controller', function(){
     describe('#removePlayer', function(){
         it('should return a promise', function(){
             BoardController.removePlayer(123, 1).should.be.instanceOf(Promise);
-        });
-
-        it('should fail when removing an invalid user from an existing board', function(done){
-            BoardModel.create({}, function(err, model){
-                BoardController.removePlayer(model._id, 1).then(null, function(err){
-                    err.should.not.be.null;
-                    done();
-                });
-            });
         });
 
         it('should fail when removing a user from an invalid board', function(done){

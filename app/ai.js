@@ -46,7 +46,7 @@ var getOpenSpotIndexes = function(spots){
 };
 
 var getRandomOpenSpot = function(spots){
-    _.chain(getOpenSpotIndexes(spots))
+    return _.chain(getOpenSpotIndexes(spots))
         .shuffle()
         .first()
         .value();
@@ -61,19 +61,14 @@ var getSpot = function(board){
             return spot;
         }
     }
-    
     return getRandomOpenSpot(spots);
 };
 
 var AI = {
     play: function(boardId){
-        var promise = BoardController.findById(boardId);
-
-        promise.then(function(board){
+        return BoardController.findById(boardId).then(function(board){
             return BoardController.play(boardId, 0, getSpot(board));
-        }, promise.reject.bind(promise));
-
-        return promise;
+        });
     }
 };
 

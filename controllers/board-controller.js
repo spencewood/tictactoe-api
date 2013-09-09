@@ -13,18 +13,12 @@ var getSpotValue = function(turn){
     return turn % 2 === 0 ? 3 : 5;
 };
 
-var ensureCorrectPlayer = function(players, playerId){
-    var index = players.indexOf(playerId);
-    if(index === -1){
-        throw 'Invalid player';
-    }
+var isCorrectPlayer = function(players, playerId){
+    return players.indexOf(playerId) >= 0;
 };
 
-var ensureCorrectTurn = function(players, playerId, turn){
-    var index = players.indexOf(playerId);
-    if(turn % 2 !== index){
-        throw 'Playing out of turn';
-    }
+var isCorrectTurn = function(players, playerId, turn){
+    return turn % 2 === players.indexOf(playerId);
 };
 
 var BoardController = {
@@ -64,16 +58,10 @@ var BoardController = {
         var promise = new Promise();
 
         this.findById(boardId).then(function(board){
-            try{
-                board.addPlayer(playerId);
-            } catch(e){
-                promise.reject(e);
-            }
-
+            board.addPlayer(playerId);
             board.save(promise.resolve.bind(promise));
-        }, promise.reject.bind(promise));
-
-        promise.then(function(model){
+            return promise;
+        }, promise.reject.bind(promise)).then(function(model){
             Events.emit('board:join', model, boardId, playerId);
             if(model.players.length === 2){
                 Events.emit('board:ready', model, boardId);
@@ -87,16 +75,10 @@ var BoardController = {
         var promise = new Promise();
 
         this.findById(boardId).then(function(board){
-            try{
-                board.removePlayer(playerId);
-            } catch(e){
-                promise.reject(e);
-            }
-
+            board.removePlayer(playerId);
             board.save(promise.resolve.bind(promise));
-        }, promise.reject.bind(promise));
-
-        promise.then(function(model){
+            return promise;
+        }, promise.reject.bind(promise)).then(function(model){
             Events.emit('board:leave', model, boardId, playerId);
         });
 
@@ -107,18 +89,16 @@ var BoardController = {
         var promise = new Promise();
 
         this.findById(boardId).then(function(board){
-            try{
-                ensureCorrectPlayer(board.players, playerId);
-                ensureCorrectTurn(board.players, playerId, board.turn);
+            if(isCorrectPlayer(board.players, playerId) &&
+                isCorrectTurn(board.players, playerId, board.turn)){
                 board.play(spot, getSpotValue(board.turn));
-            } catch(e){
-                promise.reject(e);
+                board.save(promise.resolve.bind(promise));
             }
-
-            board.save(promise.resolve.bind(promise));
-        }, promise.reject.bind(promise));
-
-        promise.then(function(model){
+            else{
+                promise.reject('Unable to play');
+            }
+            return promise;
+        }, promise.reject.bind(promise)).then(function(model){
             Events.emit('board:play', model, boardId, playerId, spot);
             if(model.isComplete){
                 Events.emit('board:complete', model, boardId);

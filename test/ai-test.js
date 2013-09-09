@@ -3,7 +3,6 @@
 /*global it: true*/
 /*global after: true*/
 
-var Promise = require('mongoose').Promise;
 var BoardModel = require('../models/board-model');
 var AI = require('../app/ai');
 
@@ -16,8 +15,11 @@ describe('Board Routes', function(){
     });
 
     describe('play', function(){
-        it.skip('should return a promise', function(){
-            AI.play(1).should.be.instanceOf(Promise);
+        it('should fail when passing a bad boardid', function(done){
+            AI.play(123).then(null, function(err){
+                err.should.not.be.null;
+                done();
+            });
         });
 
         it('should not play on a board with no ai player', function(done){
@@ -25,25 +27,22 @@ describe('Board Routes', function(){
                 players: [1, 2],
                 spots: [2, 2, 2, 2, 2, 2, 2, 2, 2]
             }, function(err, model){
-                AI.play(model._id).then(function(model){
-                    //console.log('done', model);
-                    done();
-                }, function(err){
-                    //console.log('error', err);
+                AI.play(model._id).then(null, function(err){
+                    err.should.not.be.null;
                     done();
                 });
             });
         });
 
-        it.skip('should play on a board with an ai player', function(done){
+        it('should play on a board with an ai player', function(done){
             BoardModel.create({
                 players: [0, 1],
-                spots: [2, 3, 5, 3, 5, 3, 5, 3, 5]
+                spots: [2, 2, 2, 2, 2, 2, 2, 2, 2]
             }, function(err, model){
-                //BoardController.play(model._id, 1, 0).then(function(b){
-                //    b.isComplete.should.be.true;
-                //    done();
-                //});
+                AI.play(model._id).then(function(board){
+                    board.should.not.be.null;
+                    done();
+                });
             });
         });
     });
