@@ -14,19 +14,9 @@ var firstRandomValue = function(arr){
         .value();
 };
 
-var getWinCombos = function(){
-    return [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 4, 8],
-        [6, 4, 2]
-    ];
-};
-
-var winPossible = function(spots){
+var getWinPossibilities = function(spots, combos){
     var possibilities = [];
-    _.each(getWinCombos(), function(combo){
+    _.each(combos, function(combo){
         var product = multiply(_.map(combo, function(spot){
             return spots[spot];
         }));
@@ -38,8 +28,8 @@ var winPossible = function(spots){
     return possibilities;
 };
 
-var getWinPossibility = function(spots){
-    return firstRandomValue(winPossible(spots));
+var getWinPossibility = function(spots, combos){
+    return firstRandomValue(getWinPossibilities(spots, combos));
 };
 
 var allIndexesOf = function(spots, item){
@@ -60,7 +50,7 @@ var getSpot = function(board){
     var spots = board.getSpots();
     
     if(board.getTurn() > 3){
-        var spot = getWinPossibility(spots);
+        var spot = getWinPossibility(spots, board.getWinCombos());
         if(typeof spot !== 'undefined'){
             return spot;
         }

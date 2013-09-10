@@ -58,8 +58,8 @@ var BoardController = {
         var promise = new Promise();
 
         this.findById(boardId).then(function(board){
-            board.addPlayer(playerId);
-            board.save(promise.resolve.bind(promise));
+            board.addPlayer(playerId)
+                .save(promise.resolve.bind(promise));
             return promise;
         }, promise.reject.bind(promise)).then(function(model){
             Events.emit('board:join', model, boardId, playerId);
@@ -75,8 +75,8 @@ var BoardController = {
         var promise = new Promise();
 
         this.findById(boardId).then(function(board){
-            board.removePlayer(playerId);
-            board.save(promise.resolve.bind(promise));
+            board.removePlayer(playerId)
+                .save(promise.resolve.bind(promise));
             return promise;
         }, promise.reject.bind(promise)).then(function(model){
             Events.emit('board:leave', model, boardId, playerId);
@@ -91,10 +91,11 @@ var BoardController = {
         this.findById(boardId).then(function(board){
             if(isCorrectPlayer(board.players, playerId) &&
                 isCorrectTurn(board.players, playerId, board.turn)){
-                board.play(spot, getSpotValue(board.turn));
-                board.save(promise.resolve.bind(promise));
+                board.play(spot, getSpotValue(board.turn))
+                    .save(promise.resolve.bind(promise));
             }
             else{
+                //TODO: add specific errors
                 promise.reject('Unable to play');
             }
             return promise;

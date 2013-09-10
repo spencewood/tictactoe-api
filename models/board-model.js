@@ -27,23 +27,14 @@ schema.methods.addPlayer = function(playerId){
 
 schema.methods.removePlayer = function(playerId){
     var index = this.players.indexOf(playerId);
-    if(index === -1){
-        throw 'Player not found';
-    }
-    else{
+    if(index !== -1){
         this.players.splice(index, 1);
     }
     return this;
 };
 
 schema.methods.play = function(spot, num){
-    if(!this.isReady()){
-        throw 'Board not ready';
-    }
-    else if(this.spots[spot] !== 2){
-        throw 'Spot taken';
-    }
-    else{
+    if(this.isReady() && this.spots[spot] === 2){
         this.spots[spot] = num;
         this.markModified('spots');
         this.turn++;
@@ -58,6 +49,16 @@ schema.methods.getSpots = function(){
 
 schema.methods.getTurn = function(){
     return this.turn;
+};
+
+schema.methods.getWinCombos = function(){
+    return [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 4, 8],
+        [6, 4, 2]
+    ];
 };
 
 schema.methods.isReady = function(){

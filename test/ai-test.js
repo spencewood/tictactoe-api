@@ -58,5 +58,18 @@ describe('Board Routes', function(){
                 });
             });
         });
+
+        it('should make winning move if available', function(done){
+            BoardModel.create({
+                players: [0, 1],
+                spots: [3, 3, 2, 5, 2, 2, 2, 5, 2],
+                turn: 4
+            }, function(err, model){
+                AI.play(model._id).then(function(board){
+                    board.getSpots()[2].should.equal(3);
+                    done();
+                });
+            });
+        });
     });
 });

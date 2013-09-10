@@ -277,5 +277,25 @@ describe('Board Controller', function(){
                 });
             });
         });
+
+        it.skip('should emit a "board:win" event with board and winning player', function(done){
+            Events.once('board:win', function(model, boardId, playerId){
+                model.should.not.be.null;
+                boardId.should.not.be.null;
+                playerId.should.not.be.null;
+                done();
+            });
+            BoardModel.create({
+                players: [1, 2],
+                spots: [3, 3, 2, 5, 2, 2, 2, 5, 2],
+                turn: 4
+            }, function(err, model){
+                BoardController.play(model._id, 1, 2);
+            });
+        });
+
+        it.skip('should not be able to be played on when it is marked complete', function(done){
+
+        });
     });
 });
