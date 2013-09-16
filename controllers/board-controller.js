@@ -1,25 +1,7 @@
 var BoardModel = require('../models/board-model');
 var Events = require('../events');
 var Promise = require('mongoose').Promise;
-var _ = require('underscore');
-
-var getOtherPlayer = function(players, playerId){
-    return _.reject(players, function(num){
-        return num === playerId;
-    }).pop();
-};
-
-var getSpotValue = function(turn){
-    return turn % 2 === 0 ? 3 : 5;
-};
-
-var isCorrectPlayer = function(players, playerId){
-    return players.indexOf(playerId) >= 0;
-};
-
-var isCorrectTurn = function(players, playerId, turn){
-    return turn % 2 === players.indexOf(playerId);
-};
+var ttt = require('../app/tic-tac-toe');
 
 var BoardController = {
     findOne: function(query){
@@ -89,9 +71,9 @@ var BoardController = {
         var promise = new Promise();
 
         this.findById(boardId).then(function(board){
-            if(isCorrectPlayer(board.players, playerId) &&
-                isCorrectTurn(board.players, playerId, board.turn)){
-                board.play(spot, getSpotValue(board.turn))
+            if(ttt.isCorrectPlayer(board.players, playerId) &&
+                ttt.isCorrectTurn(board.players, playerId, board.turn)){
+                board.play(spot, ttt.getSpotValue(board.turn))
                     .save(promise.resolve.bind(promise));
             }
             else{
@@ -105,7 +87,7 @@ var BoardController = {
                 Events.emit('board:complete', model, boardId);
             }
             else{
-                Events.emit('board:turn', model, boardId, getOtherPlayer(model.players, playerId));
+                Events.emit('board:turn', model, boardId, ttt.getOtherPlayer(model.players, playerId));
             }
         });
 

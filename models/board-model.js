@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var schema = require('./schemas/board-schema');
 var config = require('../config').database;
 var db = mongoose.createConnection(config.url);
+var arry = require('../util/arry');
 
 schema.path('players').validate(function(value){
     //can't have more than two players
@@ -10,14 +11,7 @@ schema.path('players').validate(function(value){
 
 schema.path('players').validate(function(value){
     //can't have duplciate players
-    var sorted_arr = value.sort();
-    var results = [];
-    for (var i = 0; i < value.length - 1; i++) {
-        if (sorted_arr[i + 1] == sorted_arr[i]) {
-            results.push(sorted_arr[i]);
-        }
-    }
-    return results.length === 0;
+    return arry.hasDuplicates(value);
 }, 'Duplicate players');
 
 schema.methods.addPlayer = function(playerId){
