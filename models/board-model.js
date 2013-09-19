@@ -71,4 +71,11 @@ schema.methods.setComplete = function(){
     return this;
 };
 
+schema.methods.setWinner = function(userId){
+    if(this.players.indexOf(userId) !== -1){
+        this.winner = userId;
+    }
+    return this;
+};
+
 module.exports = db.model('board', schema);

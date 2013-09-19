@@ -276,12 +276,30 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should store the winners userid on the board', function(done){
-
+        it('should store the winners userid on the board', function(done){
+            BoardModel.create({
+                players: [1, 2],
+                spots: [3, 3, 2, 5, 2, 2, 2, 5, 2],
+                turn: 4
+            }, function(err, model){
+                BoardController.play(model._id, 1, 2).then(function(model){
+                    model.winner.should.not.be.null;
+                    done();
+                });
+            });
         });
 
-        it.skip('should set a winning board to complete', function(done){
-
+        it('should set a winning board to complete', function(done){
+            BoardModel.create({
+                players: [1, 2],
+                spots: [3, 3, 2, 5, 2, 2, 2, 5, 2],
+                turn: 4
+            }, function(err, model){
+                BoardController.play(model._id, 1, 2).then(function(model){
+                    model.isComplete.should.be.true;
+                    done();
+                });
+            });
         });
 
         it.skip('should not be able to be played on when it is marked complete', function(done){

@@ -96,12 +96,14 @@ var BoardController = {
                 Events.emit('board:win', model, model.getPlayerOneId());
                 Events.emit('board:complete', model);
                 model.setComplete()
+                    .setWinner(model.getPlayerOneId())
                     .save(promise.resolve.bind(promise));
             }
             else if(playerTwoWon){
                 Events.emit('board:win', model, model.getPlayerTwoId());
                 Events.emit('board:complete', model);
                 model.setComplete()
+                    .setWinner(model.getPlayerTwoId())
                     .save(promise.resolve.bind(promise));
             }
             else if(full){

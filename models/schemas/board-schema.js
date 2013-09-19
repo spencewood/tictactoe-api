@@ -19,7 +19,8 @@ var BoardSchema = new Schema({
     isComplete: {
         type: Boolean,
         default: false
-    }
+    },
+    winner: Number
 });
 
 module.exports = BoardSchema;
