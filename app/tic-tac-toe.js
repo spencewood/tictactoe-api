@@ -34,12 +34,16 @@ var TicTacToe = {
         return turn % 2 === 0 ? 3 : 5;
     },
 
-    isCorrectPlayer: function(players, playerId){
-        return players.indexOf(playerId) >= 0;
+    ensureCorrectPlayer: function(players, playerId){
+        if(players.indexOf(playerId) === -1){
+            throw 'Player unable to play';
+        }
     },
 
-    isCorrectTurn: function(players, playerId, turn){
-        return turn % 2 === players.indexOf(playerId);
+    ensureCorrectTurn: function(players, playerId, turn){
+        if(turn % 2 !== players.indexOf(playerId)){
+            throw 'Player playing out of turn';
+        }
     }
 };
 

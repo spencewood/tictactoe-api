@@ -5,11 +5,7 @@ var ttt = require('../app/tic-tac-toe');
 
 var BoardController = {
     findOne: function(query){
-        var promise = new Promise();
-
-        BoardModel.findOne(query, promise.resolve.bind(promise));
-
-        return promise;
+        return BoardModel.findOne(query).exec();
     },
 
     findById: function(id){
@@ -31,57 +27,58 @@ var BoardController = {
         BoardModel.create({}, promise.resolve.bind(promise));
         promise.then(function(model){
             Events.emit('board:create', model);
+
+            return model;
         });
 
         return promise;
     },
 
     addPlayer: function(boardId, playerId){
-        var promise = new Promise();
-
-        this.findById(boardId).then(function(board){
+        return this.findById(boardId).then(function(board){
+            var promise = new Promise();
+            
             board.addPlayer(playerId)
                 .save(promise.resolve.bind(promise));
+            
             return promise;
-        }, promise.reject.bind(promise)).then(function(model){
+        }).then(function(model){
             Events.emit('board:join', model, boardId, playerId);
             if(model.players.length === 2){
                 Events.emit('board:ready', model, boardId);
             }
-        });
 
-        return promise;
+            return model;
+        });
     },
 
     removePlayer: function(boardId, playerId){
-        var promise = new Promise();
+        return this.findById(boardId).then(function(board){
+            var promise = new Promise();
 
-        this.findById(boardId).then(function(board){
             board.removePlayer(playerId)
                 .save(promise.resolve.bind(promise));
+            
             return promise;
-        }, promise.reject.bind(promise)).then(function(model){
+        }).then(function(model){
             Events.emit('board:leave', model, boardId, playerId);
-        });
 
-        return promise;
+            return model;
+        });
     },
 
     play: function(boardId, playerId, spot){
-        var promise = new Promise();
+        return this.findById(boardId).then(function(board){
+            var promise = new Promise();
 
-        this.findById(boardId).then(function(board){
-            if(ttt.isCorrectPlayer(board.players, playerId) &&
-                ttt.isCorrectTurn(board.players, playerId, board.turn)){
-                board.play(spot, ttt.getSpotValue(board.turn))
-                    .save(promise.resolve.bind(promise));
-            }
-            else{
-                //TODO: add specific errors
-                promise.reject('Unable to play');
-            }
+            ttt.ensureCorrectPlayer(board.players, playerId);
+            ttt.ensureCorrectTurn(board.players, playerId, board.turn);
+
+            board.play(spot, ttt.getSpotValue(board.turn))
+                .save(promise.resolve.bind(promise));
+
             return promise;
-        }, promise.reject.bind(promise)).then(function(model){
+        }).then(function(model){
             Events.emit('board:play', model, boardId, playerId, spot);
             if(model.isComplete){
                 Events.emit('board:complete', model, boardId);
@@ -89,9 +86,9 @@ var BoardController = {
             else{
                 Events.emit('board:turn', model, boardId, ttt.getOtherPlayer(model.players, playerId));
             }
-        });
 
-        return promise;
+            return model;
+        });
     }
 };
 

@@ -8,7 +8,7 @@ var AI = require('../app/ai');
 
 require('should');
 
-describe('Board Routes', function(){
+describe('AI', function(){
     after(function(){
         BoardModel.remove({}, function(err){
         });

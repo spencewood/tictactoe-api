@@ -56,10 +56,6 @@ describe('Board Controller', function(){
     });
 
     describe('#addPlayer', function(){
-        it('should return a promise', function(){
-            BoardController.addPlayer(123, 1).should.be.instanceOf(Promise);
-        });
-
         it('should fail when passing an invalid board id', function(done){
             BoardController.addPlayer(123, 1).then(null, function(err){
                 err.should.not.be.null;
@@ -120,10 +116,6 @@ describe('Board Controller', function(){
     });
 
     describe('#removePlayer', function(){
-        it('should return a promise', function(){
-            BoardController.removePlayer(123, 1).should.be.instanceOf(Promise);
-        });
-
         it('should fail when removing a user from an invalid board', function(done){
             BoardController.removePlayer(1, 1).then(null, function(err){
                 err.should.not.be.null;
@@ -155,10 +147,6 @@ describe('Board Controller', function(){
     });
 
     describe('#play', function(){
-        it('should return a promise', function(){
-            BoardController.play(123, 1, 1).should.be.instanceOf(Promise);
-        });
-
         it('should not be able to play when board is not ready', function(done){
             BoardModel.create({}, function(err, model){
                 BoardController.play(model._id, 1, 1).then(null, function(err){
@@ -292,6 +280,10 @@ describe('Board Controller', function(){
             }, function(err, model){
                 BoardController.play(model._id, 1, 2);
             });
+        });
+
+        it.skip('should store the winners userid on the board', function(done){
+
         });
 
         it.skip('should not be able to be played on when it is marked complete', function(done){
