@@ -2,6 +2,22 @@ var arry = require('../util/arry');
 var _ = require('underscore');
 
 var TicTacToe = {
+    getComboInfo: function(spots, combos){
+        return _.map(combos, function(combo){
+            var spotValues = _.map(combo, function(spot){
+                return spots[spot];
+            });
+
+            return {
+                spots: combo,
+                product: arry.multiply.apply(null, spotValues),
+                open: _.map(arry.allIndexesOf(spotValues, 2), function(valSpot){
+                    return combo[valSpot];
+                })
+            };
+        });
+    },
+
     getWinPossibilities: function(spots, combos){
         var possibilities = [];
         _.each(combos, function(combo){
@@ -17,11 +33,11 @@ var TicTacToe = {
     },
 
     getWinPossibility: function(spots, combos){
-        return arry.firstRandomValue(this.getWinPossibilities(spots, combos));
+        return arry.randomValue(this.getWinPossibilities(spots, combos));
     },
 
     getRandomOpenSpot: function(spots){
-        return arry.firstRandomValue(arry.allIndexesOf(spots, 2));
+        return arry.randomValue(arry.allIndexesOf(spots, 2));
     },
 
     getOtherPlayer: function(players, playerId){

@@ -1,13 +1,13 @@
 var _ = require('underscore');
 
 var Arry = {
-    multiply: function(arr){
-        return _.reduce(arr, function(memo, num){
+    multiply: function(){
+        return _.reduce(_.toArray(arguments), function(memo, num){
             return memo * num;
         });
     },
 
-    firstRandomValue: function(arr){
+    randomValue: function(arr){
         return _.chain(arr)
             .shuffle()
             .first()

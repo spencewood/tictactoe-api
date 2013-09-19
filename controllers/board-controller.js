@@ -1,6 +1,7 @@
 var BoardModel = require('../models/board-model');
 var Events = require('../events');
 var Promise = require('mongoose').Promise;
+var _ = require('underscore');
 var ttt = require('../app/tic-tac-toe');
 
 var BoardController = {
@@ -43,9 +44,9 @@ var BoardController = {
             
             return promise;
         }).then(function(model){
-            Events.emit('board:join', model, boardId, playerId);
+            Events.emit('board:join', model, playerId);
             if(model.players.length === 2){
-                Events.emit('board:ready', model, boardId);
+                Events.emit('board:ready', model);
             }
 
             return model;
@@ -61,13 +62,14 @@ var BoardController = {
             
             return promise;
         }).then(function(model){
-            Events.emit('board:leave', model, boardId, playerId);
+            Events.emit('board:leave', model, playerId);
 
             return model;
         });
     },
 
     play: function(boardId, playerId, spot){
+        //TODO: clean this up
         return this.findById(boardId).then(function(board){
             var promise = new Promise();
 
@@ -79,15 +81,40 @@ var BoardController = {
 
             return promise;
         }).then(function(model){
-            Events.emit('board:play', model, boardId, playerId, spot);
-            if(model.isComplete){
-                Events.emit('board:complete', model, boardId);
+            var promise = new Promise();
+
+            var spots = model.getSpots();
+            var info = ttt.getComboInfo(spots, model.getWinCombos());
+
+            var playerOneWon = _.findWhere(info, {product: 27});
+            var playerTwoWon = _.findWhere(info, {product: 125});
+            var full = spots.indexOf(2) === -1;
+
+            Events.emit('board:play', model, playerId, spot);
+
+            if(playerOneWon){
+                Events.emit('board:win', model, model.getPlayerOneId());
+                Events.emit('board:complete', model);
+                model.setComplete()
+                    .save(promise.resolve.bind(promise));
+            }
+            else if(playerTwoWon){
+                Events.emit('board:win', model, model.getPlayerTwoId());
+                Events.emit('board:complete', model);
+                model.setComplete()
+                    .save(promise.resolve.bind(promise));
+            }
+            else if(full){
+                Events.emit('board:complete', model);
+                model.setComplete()
+                    .save(promise.resolve.bind(promise));
             }
             else{
-                Events.emit('board:turn', model, boardId, ttt.getOtherPlayer(model.players, playerId));
+                Events.emit('board:turn', model, ttt.getOtherPlayer(model.players, playerId));
+                return model;
             }
 
-            return model;
+            return promise;
         });
     }
 };

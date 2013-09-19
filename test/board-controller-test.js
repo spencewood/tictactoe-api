@@ -74,9 +74,8 @@ describe('Board Controller', function(){
         });
 
         it('should raise an event with board and player id when a player joins a board', function(done){
-            Events.once('board:join', function(model, boardId, playerId){
+            Events.once('board:join', function(model, playerId){
                 model.should.not.be.null;
-                boardId.should.not.be.null;
                 playerId.should.not.be.null;
                 done();
             });
@@ -134,9 +133,8 @@ describe('Board Controller', function(){
         });
 
         it('should emit a "board:leave" event with the boardid and playerid', function(done){
-            Events.once('board:leave', function(model, boardId, playerId){
+            Events.once('board:leave', function(model, playerId){
                 model.should.not.be.null;
-                boardId.should.not.be.null;
                 playerId.should.not.be.null;
                 done();
             });
@@ -175,9 +173,8 @@ describe('Board Controller', function(){
         });
 
         it('should emit a "board:play" event with board, player and spot', function(done){
-            Events.once('board:play', function(model, boardId, playerId, spot){
+            Events.once('board:play', function(model, playerId, spot){
                 model.should.not.be.null;
-                boardId.should.not.be.null;
                 playerId.should.not.be.null;
                 spot.should.not.be.null;
                 done();
@@ -221,9 +218,8 @@ describe('Board Controller', function(){
         });
 
         it('should raise global event with boardid when board is complete', function(done){
-            Events.once('board:complete', function(board, boardId){
+            Events.once('board:complete', function(board){
                 board.should.not.be.null;
-                boardId.should.not.be.null;
                 done();
             });
             BoardModel.create({
@@ -235,9 +231,8 @@ describe('Board Controller', function(){
         });
 
         it('should raise global "board:turn" event with boardid and correct playerid when there is a new turn', function(done){
-            Events.once('board:turn', function(board, boardId, playerId){
+            Events.once('board:turn', function(board, playerId){
                 board.should.not.be.null;
-                boardId.should.not.be.null;
                 playerId.should.equal('2');
                 done();
             });
@@ -266,10 +261,9 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should emit a "board:win" event with board and winning player', function(done){
-            Events.once('board:win', function(model, boardId, playerId){
+        it('should emit a "board:win" event with board and winning player', function(done){
+            Events.once('board:win', function(model, playerId){
                 model.should.not.be.null;
-                boardId.should.not.be.null;
                 playerId.should.not.be.null;
                 done();
             });
@@ -283,6 +277,10 @@ describe('Board Controller', function(){
         });
 
         it.skip('should store the winners userid on the board', function(done){
+
+        });
+
+        it.skip('should set a winning board to complete', function(done){
 
         });
 

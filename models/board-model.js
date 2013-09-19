@@ -32,7 +32,6 @@ schema.methods.play = function(spot, num){
         this.spots[spot] = num;
         this.markModified('spots');
         this.turn++;
-        this.isComplete = this.spots.indexOf(2) === -1;
     }
     return this;
 };
@@ -57,6 +56,19 @@ schema.methods.getWinCombos = function(){
 
 schema.methods.isReady = function(){
     return this.players.length === 2;
+};
+
+schema.methods.getPlayerOneId = function(){
+    return this.players[0];
+};
+
+schema.methods.getPlayerTwoId = function(){
+    return this.players[1];
+};
+
+schema.methods.setComplete = function(){
+    this.isComplete = true;
+    return this;
 };
 
 module.exports = db.model('board', schema);
