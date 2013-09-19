@@ -302,8 +302,16 @@ describe('Board Controller', function(){
             });
         });
 
-        it.skip('should not be able to be played on when it is marked complete', function(done){
-
+        it('should not be able to be played on when it is marked complete', function(done){
+            BoardModel.create({
+                players: [1, 2],
+                isComplete: true
+            }, function(err, model){
+                BoardController.play(model._id, 1, 2).then(null, function(err){
+                    err.should.not.be.null;
+                    done();
+                });
+            });
         });
     });
 });

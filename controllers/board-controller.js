@@ -73,6 +73,10 @@ var BoardController = {
         return this.findById(boardId).then(function(board){
             var promise = new Promise();
 
+            if(board.isComplete){
+                throw 'Unable to play on complete board';
+            }
+
             ttt.ensureCorrectPlayer(board.players, playerId);
             ttt.ensureCorrectTurn(board.players, playerId, board.turn);
 

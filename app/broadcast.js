@@ -88,6 +88,16 @@ Events.on('board:complete', function(board){
     });
 });
 
+Events.on('board:win', function(board, playerId){
+    pubnub.publish({
+        channel: channel('board:win'),
+        message: {
+            boardId: board._id,
+            playerId: playerId
+        }
+    });
+});
+
 /**
  * User Events
  */
