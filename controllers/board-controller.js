@@ -61,19 +61,17 @@ var BoardController = {
     },
 
     addPlayer: function(boardId, playerId){
-        var promise = new Promise();
+        var promise = this.findById(boardId);
 
-        this.findById(boardId).then(function(board){
-            try{
+        promise.then(function(board){
+            process.nextTick(function(){
                 board.addPlayer(playerId);
-            } catch(e){
-                promise.reject(e);
-            }
-
-            board.save(promise.resolve.bind(promise));
-        }, promise.reject.bind(promise));
+            });
+            return board.save();
+        });
 
         promise.then(function(model){
+            console.log('then2');
             Events.emit('board:join', model, boardId, playerId);
             if(model.players.length === 2){
                 Events.emit('board:ready', model, boardId);
